@@ -1,3 +1,4 @@
+
 # Queue Transformer
 
 Event-level modelling of a queue with a Transformer. The model is trained on logs of
@@ -115,3 +116,4 @@ Real data:
 - Real-data Transformer results use the earlier MSE head and have not been re-checked with `diagnose_generation.py`.
 - The cause of unstable free-running generation is not established; exposure bias is a hypothesis only.
 - Trained checkpoints are not included.
+
