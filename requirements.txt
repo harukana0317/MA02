@@ -1,0 +1,6 @@
+torch>=2.0.0
+numpy
+scipy>=1.10.0
+o2despy==0.0.7
+pandas
+sortedcontainers

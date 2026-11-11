@@ -1,0 +1,943 @@
+Last login: Mon Nov  2 20:08:08 on ttys000
+harukana_0317@Mac ~ % cd /Users/harukana_0317/Desktop/MA02
+ls
+__pycache__				numerical_studies(no pytorch).py
+baseline.py				real_data.csv
+checkpoint.pt				runs
+data.py					sanity_check_step1.py
+generate.py				sanity_check_step2.py
+model.py				train.py
+numerical_studies_summary.csv		utils.py
+numerical_studies.py
+harukana_0317@Mac MA02 % grep -c "gg1" train.py
+8
+harukana_0317@Mac MA02 % mv checkpoint.pt checkpoint_step1.pt
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch
+[seed 0] Generating 20 G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] Epoch 1/100: {'train_loss': 1.5896883737295866, 'val_event_loss': 0.6087768198414283, 'val_time_loss': 1.3791581072590569}
+[seed 0] Epoch 2/100: {'train_loss': 1.355948624201119, 'val_event_loss': 0.5513170621611855, 'val_time_loss': 1.3501980223438956}
+[seed 0] Epoch 3/100: {'train_loss': 1.509868738707155, 'val_event_loss': 0.5511230421337214, 'val_time_loss': 1.311868040670048}
+[seed 0] Epoch 4/100: {'train_loss': 1.458421127870679, 'val_event_loss': 0.5736150681972504, 'val_time_loss': 1.306626097722487}
+[seed 0] Epoch 5/100: {'train_loss': 1.3176658507436514, 'val_event_loss': 0.5573363156481222, 'val_time_loss': 1.4896052406592803}
+[seed 0] Epoch 6/100: {'train_loss': 1.6020772033371031, 'val_event_loss': 0.5404349870302461, 'val_time_loss': 1.2349575354294344}
+[seed 0] Epoch 7/100: {'train_loss': 1.8112429394386709, 'val_event_loss': 0.5540528424761512, 'val_time_loss': 1.2565819282423367}
+[seed 0] Epoch 8/100: {'train_loss': 1.456555949524045, 'val_event_loss': 0.5556203370744531, 'val_time_loss': 1.3373370937325737}
+[seed 0] Epoch 9/100: {'train_loss': 1.2407441714312881, 'val_event_loss': 0.5343728885054588, 'val_time_loss': 1.4166438205675644}
+[seed 0] Epoch 10/100: {'train_loss': 1.4156302995979786, 'val_event_loss': 0.5377439200878144, 'val_time_loss': 1.2528735960071737}
+[seed 0] Epoch 11/100: {'train_loss': 1.390498090069741, 'val_event_loss': 0.5288406911221417, 'val_time_loss': 1.2792328520254654}
+[seed 0] Epoch 12/100: {'train_loss': 1.3927269880659878, 'val_event_loss': 0.5264861288395795, 'val_time_loss': 1.299627478014339}
+[seed 0] Epoch 13/100: {'train_loss': 1.4686138918623328, 'val_event_loss': 0.5623840911821886, 'val_time_loss': 1.3290813223882154}
+[seed 0] Epoch 14/100: {'train_loss': 1.635876541491598, 'val_event_loss': 0.5397737620906397, 'val_time_loss': 1.2690640346570448}
+[seed 0] Epoch 15/100: {'train_loss': 1.4572687484323978, 'val_event_loss': 0.5555391025136818, 'val_time_loss': 1.3260240332646804}
+[seed 0] Epoch 16/100: {'train_loss': 1.5139998523518443, 'val_event_loss': 0.5615643111142246, 'val_time_loss': 1.2754513363946567}
+[seed 0] Epoch 17/100: {'train_loss': 1.6018248368054628, 'val_event_loss': 0.5361907178705388, 'val_time_loss': 1.304958145726811}
+[seed 0] Epoch 18/100: {'train_loss': 1.302545425714925, 'val_event_loss': 0.5443365948444063, 'val_time_loss': 1.3667091207070785}
+[seed 0] Epoch 19/100: {'train_loss': 1.4407927463762462, 'val_event_loss': 0.5323174209757284, 'val_time_loss': 1.2852477060122924}
+[seed 0] Epoch 20/100: {'train_loss': 1.583158812019974, 'val_event_loss': 0.5384480183774775, 'val_time_loss': 1.2888098510828885}
+[seed 0] Epoch 21/100: {'train_loss': 1.5288150263950229, 'val_event_loss': 0.5502308398485184, 'val_time_loss': 1.2653600611469962}
+[seed 0] Epoch 22/100: {'train_loss': 1.757568720728159, 'val_event_loss': 0.524137429554354, 'val_time_loss': 1.2485334992408752}
+[seed 0] Epoch 23/100: {'train_loss': 1.582685012370348, 'val_event_loss': 0.533051668513905, 'val_time_loss': 1.26567386822267}
+[seed 0] Epoch 24/100: {'train_loss': 1.6316616795957088, 'val_event_loss': 0.5324629925868728, 'val_time_loss': 1.259398920156739}
+[seed 0] Epoch 25/100: {'train_loss': 1.534160268958658, 'val_event_loss': 0.5483895586295562, 'val_time_loss': 1.289321535283869}
+[seed 0] Epoch 26/100: {'train_loss': 1.5719997193664312, 'val_event_loss': 0.5307485486973416, 'val_time_loss': 1.2923817558722062}
+[seed 0] Epoch 27/100: {'train_loss': 1.504948309622705, 'val_event_loss': 0.536023642055013, 'val_time_loss': 1.2746809764341875}
+[seed 0] Epoch 28/100: {'train_loss': 1.41846840409562, 'val_event_loss': 0.5296205923638561, 'val_time_loss': 1.2851727228273044}
+[seed 0] Epoch 29/100: {'train_loss': 1.2277253093197942, 'val_event_loss': 0.5399421066723087, 'val_time_loss': 1.3466962107203224}
+[seed 0] Epoch 30/100: {'train_loss': 1.4702792693860829, 'val_event_loss': 0.5254924255338582, 'val_time_loss': 1.2756623774766922}
+[seed 0] Epoch 31/100: {'train_loss': 1.6982366708107293, 'val_event_loss': 0.5317975460805676, 'val_time_loss': 1.230707197297703}
+[seed 0] Epoch 32/100: {'train_loss': 1.6579158552922308, 'val_event_loss': 0.5365425720133564, 'val_time_loss': 1.291712721098553}
+[seed 0] Epoch 33/100: {'train_loss': 1.5816082088276744, 'val_event_loss': 0.5411209852180697, 'val_time_loss': 1.2675079546191477}
+[seed 0] Epoch 34/100: {'train_loss': 1.545207591727376, 'val_event_loss': 0.5426598136397925, 'val_time_loss': 1.271151077747345}
+[seed 0] Epoch 35/100: {'train_loss': 1.4899709108285606, 'val_event_loss': 0.5284403299743479, 'val_time_loss': 1.280537214604291}
+[seed 0] Epoch 36/100: {'train_loss': 1.3986178622581065, 'val_event_loss': 0.5344412187283689, 'val_time_loss': 1.2557784961028533}
+[seed 0] Epoch 37/100: {'train_loss': 1.5532098012045026, 'val_event_loss': 0.5431289499456232, 'val_time_loss': 1.2804135290059175}
+[seed 0] Epoch 38/100: {'train_loss': 1.4974005660042167, 'val_event_loss': 0.5387991485270587, 'val_time_loss': 1.2523601496761496}
+[seed 0] Epoch 39/100: {'train_loss': 1.3313746047206223, 'val_event_loss': 0.5412318837236274, 'val_time_loss': 1.3701972847635095}
+[seed 0] Epoch 40/100: {'train_loss': 1.5244774613529444, 'val_event_loss': 0.5353090746836229, 'val_time_loss': 1.2430530434305018}
+[seed 0] Epoch 41/100: {'train_loss': 1.4906213758513331, 'val_event_loss': 0.5379992941563779, 'val_time_loss': 1.2487263787876477}
+[seed 0] Epoch 42/100: {'train_loss': 1.5555172632448375, 'val_event_loss': 0.5303144862028686, 'val_time_loss': 1.2303718829696828}
+[seed 0] Epoch 43/100: {'train_loss': 1.5450276546180248, 'val_event_loss': 0.5281275172125209, 'val_time_loss': 1.272034594145688}
+[seed 0] Epoch 44/100: {'train_loss': 1.6323683918453753, 'val_event_loss': 0.5482935931872238, 'val_time_loss': 1.2546723441644148}
+[seed 0] Epoch 45/100: {'train_loss': 1.4419017783366144, 'val_event_loss': 0.5174251770431345, 'val_time_loss': 1.2964520259336991}
+[seed 0] Epoch 46/100: {'train_loss': 1.53946746699512, 'val_event_loss': 0.5259242736480453, 'val_time_loss': 1.240993930805813}
+[seed 0] Epoch 47/100: {'train_loss': 1.2490082811564207, 'val_event_loss': 0.5298085097562183, 'val_time_loss': 1.3559027828953483}
+[seed 0] Epoch 48/100: {'train_loss': 1.6031891158781946, 'val_event_loss': 0.529329768026417, 'val_time_loss': 1.217291981252757}
+[seed 0] Epoch 49/100: {'train_loss': 1.3437048033811152, 'val_event_loss': 0.5285214429551904, 'val_time_loss': 1.3195525567639959}
+[seed 0] Epoch 50/100: {'train_loss': 1.6008442635647953, 'val_event_loss': 0.5380569332025268, 'val_time_loss': 1.2507462124932895}
+[seed 0] Epoch 51/100: {'train_loss': 1.4584775934927166, 'val_event_loss': 0.5319514750079675, 'val_time_loss': 1.2527427852153779}
+[seed 0] Epoch 52/100: {'train_loss': 1.5114902728237212, 'val_event_loss': 0.5156521354209292, 'val_time_loss': 1.2602860044349324}
+[seed 0] Epoch 53/100: {'train_loss': 1.6716693290509284, 'val_event_loss': 0.528215127099644, 'val_time_loss': 1.2654085609045895}
+[seed 0] Epoch 54/100: {'train_loss': 1.5425078961998224, 'val_event_loss': 0.5349498063325882, 'val_time_loss': 1.290585555271669}
+[seed 0] Epoch 55/100: {'train_loss': 1.4238095101900399, 'val_event_loss': 0.5313700315627184, 'val_time_loss': 1.3094536979090083}
+[seed 0] Epoch 56/100: {'train_loss': 1.4847500915639102, 'val_event_loss': 0.5383950290354815, 'val_time_loss': 1.251173656095158}
+[seed 0] Epoch 57/100: {'train_loss': 1.6179162138141692, 'val_event_loss': 0.5283564430746165, 'val_time_loss': 1.2786112958734686}
+[seed 0] Epoch 58/100: {'train_loss': 1.528055476024747, 'val_event_loss': 0.538176583701914, 'val_time_loss': 1.2552565314553001}
+[seed 0] Epoch 59/100: {'train_loss': 1.5503839985467494, 'val_event_loss': 0.5449143234979023, 'val_time_loss': 1.253482874956998}
+[seed 0] Epoch 60/100: {'train_loss': 1.8701135339215398, 'val_event_loss': 0.5348710685629736, 'val_time_loss': 1.2479643073948947}
+[seed 0] Epoch 61/100: {'train_loss': 1.6792844934388995, 'val_event_loss': 0.5475806926461784, 'val_time_loss': 1.2733531773090363}
+[seed 0] Epoch 62/100: {'train_loss': 1.3171271695755422, 'val_event_loss': 0.5211231921206821, 'val_time_loss': 1.2853640580719168}
+[seed 0] Epoch 63/100: {'train_loss': 1.2946186969056726, 'val_event_loss': 0.5219005052338946, 'val_time_loss': 1.2782338998534464}
+[seed 0] Epoch 64/100: {'train_loss': 1.3368699187412858, 'val_event_loss': 0.5326781625097449, 'val_time_loss': 1.3255213555964556}
+[seed 0] Epoch 65/100: {'train_loss': 2.012850391678512, 'val_event_loss': 0.5595533041791483, 'val_time_loss': 1.3006099110299891}
+[seed 0] Epoch 66/100: {'train_loss': 1.4436323759146035, 'val_event_loss': 0.5305547928945584, 'val_time_loss': 1.2507356478409333}
+[seed 0] Epoch 67/100: {'train_loss': 1.5459882416762412, 'val_event_loss': 0.5277681002562696, 'val_time_loss': 1.2799531047994441}
+[seed 0] Epoch 68/100: {'train_loss': 1.3489075819961727, 'val_event_loss': 0.5243144961920652, 'val_time_loss': 1.3130083891478452}
+[seed 0] Epoch 69/100: {'train_loss': 1.2702931254170835, 'val_event_loss': 0.5210112282498316, 'val_time_loss': 1.3447665182026949}
+[seed 0] Epoch 70/100: {'train_loss': 1.661856749560684, 'val_event_loss': 0.5204764677042311, 'val_time_loss': 1.2385109402916648}
+[seed 0] Epoch 71/100: {'train_loss': 1.2432536634150892, 'val_event_loss': 0.5148247683590109, 'val_time_loss': 1.4114589428359812}
+[seed 0] Epoch 72/100: {'train_loss': 1.5935134654864669, 'val_event_loss': 0.5317074027251113, 'val_time_loss': 1.2355585740371184}
+[seed 0] Epoch 73/100: {'train_loss': 1.3892604084685445, 'val_event_loss': 0.5350062656131658, 'val_time_loss': 1.3049888369711962}
+[seed 0] Epoch 74/100: {'train_loss': 1.4469813550822437, 'val_event_loss': 0.5236438343470747, 'val_time_loss': 1.2768650824373418}
+[seed 0] Epoch 75/100: {'train_loss': 1.4243801184929907, 'val_event_loss': 0.5245659711686048, 'val_time_loss': 1.3624021817337384}
+[seed 0] Epoch 76/100: {'train_loss': 1.3802311080507934, 'val_event_loss': 0.5383126544004136, 'val_time_loss': 1.255894707549702}
+[seed 0] Epoch 77/100: {'train_loss': 1.3099490483291447, 'val_event_loss': 0.5393362416462465, 'val_time_loss': 1.321065447547219}
+[seed 0] Epoch 78/100: {'train_loss': 1.5236704368144274, 'val_event_loss': 0.5346959464251995, 'val_time_loss': 1.2395699866793373}
+[seed 0] Epoch 79/100: {'train_loss': 1.6475259801372886, 'val_event_loss': 0.5449821390888908, 'val_time_loss': 1.257437873157588}
+[seed 0] Epoch 80/100: {'train_loss': 1.3664909894578159, 'val_event_loss': 0.525687021558935, 'val_time_loss': 1.3282203582200136}
+[seed 0] Epoch 81/100: {'train_loss': 1.4748109560459852, 'val_event_loss': 0.5306245624341748, 'val_time_loss': 1.2242835459384052}
+[seed 0] Epoch 82/100: {'train_loss': 1.6367345438338816, 'val_event_loss': 0.5420504339716651, 'val_time_loss': 1.2646115070039576}
+[seed 0] Epoch 83/100: {'train_loss': 1.5141890472732484, 'val_event_loss': 0.5295698583126068, 'val_time_loss': 1.2767927879636938}
+[seed 0] Epoch 84/100: {'train_loss': 1.5239789704792202, 'val_event_loss': 0.5229415167461742, 'val_time_loss': 1.2761733559044925}
+[seed 0] Epoch 85/100: {'train_loss': 1.5214073085226119, 'val_event_loss': 0.5198635850440372, 'val_time_loss': 1.2357445053078913}
+[seed 0] Epoch 86/100: {'train_loss': 1.4361854959279299, 'val_event_loss': 0.524388038976626, 'val_time_loss': 1.295314605940472}
+[seed 0] Epoch 87/100: {'train_loss': 1.549404526129365, 'val_event_loss': 0.5313738027756865, 'val_time_loss': 1.2689090216701682}
+[seed 0] Epoch 88/100: {'train_loss': 1.5114664542488754, 'val_event_loss': 0.5237268575213172, 'val_time_loss': 1.261504256454381}
+[seed 0] Epoch 89/100: {'train_loss': 1.359903411474079, 'val_event_loss': 0.5192922561683438, 'val_time_loss': 1.2486029172485524}
+[seed 0] Epoch 90/100: {'train_loss': 1.3074633786454797, 'val_event_loss': 0.5265537705611099, 'val_time_loss': 1.2862625048919158}
+[seed 0] Epoch 91/100: {'train_loss': 1.3628864628262818, 'val_event_loss': 0.526990339837291, 'val_time_loss': 1.3303677431561731}
+[seed 0] Epoch 92/100: {'train_loss': 1.4565107780508697, 'val_event_loss': 0.5234871871092103, 'val_time_loss': 1.3533529910174282}
+[seed 0] Epoch 93/100: {'train_loss': 1.491660871077329, 'val_event_loss': 0.5369795692915266, 'val_time_loss': 1.2742158090526408}
+[seed 0] Epoch 94/100: {'train_loss': 1.497523935046047, 'val_event_loss': 0.5343325261365284, 'val_time_loss': 1.2448695721951397}
+[seed 0] Epoch 95/100: {'train_loss': 1.5783608127385378, 'val_event_loss': 0.5302985575388778, 'val_time_loss': 1.2366917921738192}
+[seed 0] Epoch 96/100: {'train_loss': 1.417659253347665, 'val_event_loss': 0.5220588828352365, 'val_time_loss': 1.259150832349604}
+[seed 0] Epoch 97/100: {'train_loss': 1.4843363333493471, 'val_event_loss': 0.537842498448762, 'val_time_loss': 1.3081698076291517}
+[seed 0] Epoch 98/100: {'train_loss': 1.5076773054897785, 'val_event_loss': 0.5220818674022502, 'val_time_loss': 1.3010754000056874}
+[seed 0] Epoch 99/100: {'train_loss': 1.4066239772364497, 'val_event_loss': 0.5222050658681175, 'val_time_loss': 1.3793341197750786}
+[seed 0] Epoch 100/100: {'train_loss': 1.3647045958787203, 'val_event_loss': 0.5190267319706353, 'val_time_loss': 1.2811329131776636}
+[seed 0] Best validation event loss: 0.5148 at epoch 71/100. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.5981653388250958, 'test_time_loss': 1.3669652226296338, 'best_epoch': 71}
+[seed 0] Saved checkpoint to checkpoint.pt
+harukana_0317@Mac MA02 % [200~python3 sanity_check_step2.py --checkpoint checkpoint.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25~
+zsh: bad pattern: [200~python3
+harukana_0317@Mac MA02 % unset zle_bracketed_paste
+harukana_0317@Mac MA02 % python3 sanity_check_step2.py --checkpoint checkpoint.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+============================================================
+STEP 2 SANITY CHECK: G/G/1 queue (single server, Gamma-distributed)
+============================================================
+Ground-truth parameters: arrival ~ Gamma(shape=2.0, scale=40.0s) [mean=80.0s], service ~ Gamma(shape=2.0, scale=25.0s) [mean=50.0s]
+Utilisation (rho) = 0.62 (STABLE)
+
+--- GROUND TRUTH (fresh G/G/1 draw) ---
+  Customers observed:      300
+  Observation span:        361.9 minutes
+  Arrival rate:            0.829 customers/min
+  Service rate:            0.862 customers/min per server
+  Wait time (Arrival->Order): mean=14.3s  std=12.0s  min=0.4s  max=72.7s  (n=300)
+  Service time (Order->Leave): mean=69.6s  std=48.8s  min=2.6s  max=277.3s  (n=300)
+  Cycle time (Arrival->Leave): mean=84.0s  std=57.7s  min=3.3s  max=323.3s  (n=300)
+  Little's Law (L = arrival_rate x mean cycle time): ~1.16 customers in the system on average (waiting + being served)
+  Theoretical utilisation with 1 server(s): rho = 0.96 -- < 1.0, consistent with a stable classical queueing system at this server count.
+
+--- TRANSFORMER (trained on G/G/1 data) ---
+  Customers observed:      303
+  Observation span:        419.4 minutes
+  Arrival rate:            0.722 customers/min
+  Service rate:            0.523 customers/min per server
+  Wait time (Arrival->Order): mean=65.8s  std=43.0s  min=4.1s  max=125.7s  (n=302)
+  Service time (Order->Leave): mean=114.7s  std=64.3s  min=21.9s  max=249.4s  (n=302)
+  Cycle time (Arrival->Leave): mean=180.0s  std=96.6s  min=7.6s  max=350.4s  (n=303)
+  Little's Law (L = arrival_rate x mean cycle time): ~2.17 customers in the system on average (waiting + being served)
+
+#################################################
+# TRANSFORMER vs GROUND TRUTH
+#################################################
+
+--- Cycle time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   83.97s  std=   57.75s
+  Transformer: n= 303  mean=  179.99s  std=   96.60s
+  Welch's t-test:  t=-14.832, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.589, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Wait time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   14.33s  std=   11.98s
+  Transformer: n= 302  mean=   65.83s  std=   42.96s
+  Welch's t-test:  t=-20.062, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.635, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Service time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   69.64s  std=   48.77s
+  Transformer: n= 302  mean=  114.73s  std=   64.32s
+  Welch's t-test:  t=-9.696, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.492, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Repeated over 10 random seeds ---
+
+--- Transformer vs ground truth: cycle time: repeated over 10 random seeds ---
+  Real mean:                    84.0s
+  Simulated mean (across 10 runs):    226.4s  ± 231.9s (1 std dev across runs)
+  Gap:                        +142.4s
+  One-sample t-test (H0: simulated runs average to the real mean): t=1.942, p=0.0840  (consistent with real mean)
+
+#################################################
+# VERDICT
+#################################################
+If the tests above mostly show p > 0.05 ('consistent' / 'NOT significantly
+different'), the model has learned useful structure from a real (if simple)
+queueing process with genuine contention, and it is reasonable to move on
+to Step 3 (parallel servers / tandem structures — already explored against
+real data in Section 3.3-3.4).
+If they show strong, consistent significant differences but Step 1 passed,
+the issue is specifically in learning QUEUEING dynamics (contention/waiting)
+rather than the pipeline itself — consider more training, more data, or a
+larger model (d_model / num_layers).
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --d_model 128 --num_layers 3 --checkpoint checkpoint_big.pt
+[seed 0] Generating 20 G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] Epoch 1/100: {'train_loss': 1.7816823008470237, 'val_event_loss': 0.6612033029848879, 'val_time_loss': 1.4455632784149863}
+[seed 0] Epoch 2/100: {'train_loss': 1.3638444549869746, 'val_event_loss': 0.5933865945447575, 'val_time_loss': 1.3820020681077785}
+[seed 0] Epoch 3/100: {'train_loss': 1.5267664906568825, 'val_event_loss': 0.5574472935362296, 'val_time_loss': 1.389483738487417}
+[seed 0] Epoch 4/100: {'train_loss': 1.4717946047894657, 'val_event_loss': 0.5726165118542584, 'val_time_loss': 1.3337454278360714}
+[seed 0] Epoch 5/100: {'train_loss': 1.3258902044035494, 'val_event_loss': 0.546093678068031, 'val_time_loss': 1.4313777723095633}
+[seed 0] Epoch 6/100: {'train_loss': 1.6229525255039334, 'val_event_loss': 0.5592017819935625, 'val_time_loss': 1.2656564739617435}
+[seed 0] Epoch 7/100: {'train_loss': 1.8243161891587079, 'val_event_loss': 0.5613361717625098, 'val_time_loss': 1.255141005190936}
+[seed 0] Epoch 8/100: {'train_loss': 1.4526649727486074, 'val_event_loss': 0.5474584087729454, 'val_time_loss': 1.3168356296691028}
+[seed 0] Epoch 9/100: {'train_loss': 1.239449466113001, 'val_event_loss': 0.5423878821459683, 'val_time_loss': 1.4041293894702738}
+[seed 0] Epoch 10/100: {'train_loss': 1.4313548472709954, 'val_event_loss': 0.5441217904741114, 'val_time_loss': 1.279708695140752}
+[seed 0] Epoch 11/100: {'train_loss': 1.4001973723061383, 'val_event_loss': 0.5318257277662104, 'val_time_loss': 1.2636379063129426}
+[seed 0] Epoch 12/100: {'train_loss': 1.3947473797015846, 'val_event_loss': 0.5392837167463519, 'val_time_loss': 1.2779315688393333}
+^[[seed 0] Epoch 13/100: {'train_loss': 1.4623320065438747, 'val_event_loss': 0.5632721319794655, 'val_time_loss': 1.3005537677894938}
+[seed 0] Epoch 14/100: {'train_loss': 1.636288836132735, 'val_event_loss': 0.5472931169650771, 'val_time_loss': 1.2719629889184778}
+[seed 0] Epoch 15/100: {'train_loss': 1.4630014835856855, 'val_event_loss': 0.5616207059134136, 'val_time_loss': 1.3611661680720069}
+[seed 0] Epoch 16/100: {'train_loss': 1.5198943451978266, 'val_event_loss': 0.5649925978346304, 'val_time_loss': 1.2952639720656656}
+[seed 0] Epoch 17/100: {'train_loss': 1.6075757816433907, 'val_event_loss': 0.5284196712753989, 'val_time_loss': 1.2727523307908666}
+[seed 0] Epoch 18/100: {'train_loss': 1.3006036495789886, 'val_event_loss': 0.5357527608221228, 'val_time_loss': 1.3500170989470048}
+[seed 0] Epoch 19/100: {'train_loss': 1.4417871474288404, 'val_event_loss': 0.5403608154166829, 'val_time_loss': 1.314190249280496}
+[seed 0] Epoch 20/100: {'train_loss': 1.590467642992735, 'val_event_loss': 0.54708436998454, 'val_time_loss': 1.270387413014065}
+[seed 0] Epoch 21/100: {'train_loss': 1.5287208505906165, 'val_event_loss': 0.562996818260713, 'val_time_loss': 1.292306123809381}
+[seed 0] Epoch 22/100: {'train_loss': 1.7737181368283927, 'val_event_loss': 0.5436977370218797, 'val_time_loss': 1.29837818199938}
+[seed 0] Epoch 23/100: {'train_loss': 1.5932769803330302, 'val_event_loss': 0.5419229996475307, 'val_time_loss': 1.2739787237210707}
+[seed 0] Epoch 24/100: {'train_loss': 1.6372571419924498, 'val_event_loss': 0.5412397009405223, 'val_time_loss': 1.286014401641759}
+[seed 0] Epoch 25/100: {'train_loss': 1.537692139390856, 'val_event_loss': 0.531970209560611, 'val_time_loss': 1.319665971940214}
+[seed 0] Epoch 26/100: {'train_loss': 1.5731167304329574, 'val_event_loss': 0.5472611786289648, 'val_time_loss': 1.3277376849542966}
+[seed 0] Epoch 27/100: {'train_loss': 1.5144853740930557, 'val_event_loss': 0.5624470023269003, 'val_time_loss': 1.3029765437949787}
+[seed 0] Epoch 28/100: {'train_loss': 1.418010591994971, 'val_event_loss': 0.5293143728917296, 'val_time_loss': 1.3163703487678007}
+[seed 0] Epoch 29/100: {'train_loss': 1.2223333038855344, 'val_event_loss': 0.5383506766774437, 'val_time_loss': 1.3381940540942279}
+[seed 0] Epoch 30/100: {'train_loss': 1.4713030471466482, 'val_event_loss': 0.5249936559660868, 'val_time_loss': 1.2935834554108707}
+[seed 0] Epoch 31/100: {'train_loss': 1.7111374791711569, 'val_event_loss': 0.5373552556742321, 'val_time_loss': 1.2370926504785364}
+[seed 0] Epoch 32/100: {'train_loss': 1.6650892877951264, 'val_event_loss': 0.5374519029124216, 'val_time_loss': 1.283812993223017}
+[seed 0] Epoch 33/100: {'train_loss': 1.5808444418944418, 'val_event_loss': 0.5412457846782425, 'val_time_loss': 1.2758853454481471}
+[seed 0] Epoch 34/100: {'train_loss': 1.5437945891171694, 'val_event_loss': 0.5336262335831469, 'val_time_loss': 1.255264063044028}
+[seed 0] Epoch 35/100: {'train_loss': 1.4820972480811179, 'val_event_loss': 0.5327794107523831, 'val_time_loss': 1.274389957297932}
+[seed 0] Epoch 36/100: {'train_loss': 1.4001171165145934, 'val_event_loss': 0.5382634891705079, 'val_time_loss': 1.272821553186937}
+[seed 0] Epoch 37/100: {'train_loss': 1.5543083604425192, 'val_event_loss': 0.5350086633454669, 'val_time_loss': 1.321091915802522}
+[seed 0] Epoch 38/100: {'train_loss': 1.494428891222924, 'val_event_loss': 0.542090943320231, 'val_time_loss': 1.3003584604371679}
+[seed 0] Epoch 39/100: {'train_loss': 1.3290138375014067, 'val_event_loss': 0.5304346545853398, 'val_time_loss': 1.2882846704938196}
+[seed 0] Epoch 40/100: {'train_loss': 1.5197798158042133, 'val_event_loss': 0.5332694184373725, 'val_time_loss': 1.256474285775965}
+[seed 0] Epoch 41/100: {'train_loss': 1.483797472435981, 'val_event_loss': 0.5338296328755943, 'val_time_loss': 1.2996989754113284}
+[seed 0] Epoch 42/100: {'train_loss': 1.5589548968710005, 'val_event_loss': 0.5276500309055502, 'val_time_loss': 1.249461525949565}
+[seed 0] Epoch 43/100: {'train_loss': 1.5453913738019764, 'val_event_loss': 0.5281323866410689, 'val_time_loss': 1.2891896432096308}
+[seed 0] Epoch 44/100: {'train_loss': 1.6283791572786868, 'val_event_loss': 0.5554460011422634, 'val_time_loss': 1.2640554731542415}
+[seed 0] Epoch 45/100: {'train_loss': 1.4370551747269928, 'val_event_loss': 0.5260578197511759, 'val_time_loss': 1.2647427889433773}
+[seed 0] Epoch 46/100: {'train_loss': 1.5429184725508094, 'val_event_loss': 0.5317272219468246, 'val_time_loss': 1.2449413976886057}
+[seed 0] Epoch 47/100: {'train_loss': 1.2458108053542674, 'val_event_loss': 0.5255129697647962, 'val_time_loss': 1.3302748926661232}
+[seed 0] Epoch 48/100: {'train_loss': 1.6081910468637943, 'val_event_loss': 0.5265131976794113, 'val_time_loss': 1.2522573373534462}
+[seed 0] Epoch 49/100: {'train_loss': 1.3380322949960828, 'val_event_loss': 0.5251810145649043, 'val_time_loss': 1.2911763792688196}
+[seed 0] Epoch 50/100: {'train_loss': 1.5932040424086154, 'val_event_loss': 0.5274953682314266, 'val_time_loss': 1.277858731150627}
+[seed 0] Epoch 51/100: {'train_loss': 1.4546920978464186, 'val_event_loss': 0.5446902931413867, 'val_time_loss': 1.2616553824056278}
+[seed 0] Epoch 52/100: {'train_loss': 1.5088464631699026, 'val_event_loss': 0.5262787183577364, 'val_time_loss': 1.228056950731711}
+[seed 0] Epoch 53/100: {'train_loss': 1.6585728391073644, 'val_event_loss': 0.5424261066723953, 'val_time_loss': 1.2829249701716683}
+[seed 0] Epoch 54/100: {'train_loss': 1.542383510619402, 'val_event_loss': 0.5393805642019619, 'val_time_loss': 1.263308049332012}
+[seed 0] Epoch 55/100: {'train_loss': 1.4170541437342763, 'val_event_loss': 0.5342419734055346, 'val_time_loss': 1.3006166739897294}
+[seed 0] Epoch 56/100: {'train_loss': 1.4886194472201169, 'val_event_loss': 0.5484060935676098, 'val_time_loss': 1.286713350902904}
+[seed 0] Epoch 57/100: {'train_loss': 1.627386575564742, 'val_event_loss': 0.5259052552960136, 'val_time_loss': 1.3134441370313819}
+[seed 0] Epoch 58/100: {'train_loss': 1.525672027375549, 'val_event_loss': 0.5316436828537421, 'val_time_loss': 1.264762882752852}
+[seed 0] Epoch 59/100: {'train_loss': 1.5464332541450858, 'val_event_loss': 0.5400064233351838, 'val_time_loss': 1.226899561827833}
+[seed 0] Epoch 60/100: {'train_loss': 1.8744996734894812, 'val_event_loss': 0.5370306911116297, 'val_time_loss': 1.2474003011530095}
+[seed 0] Epoch 61/100: {'train_loss': 1.6780626447871327, 'val_event_loss': 0.5441091626882553, 'val_time_loss': 1.301984772898934}
+[seed 0] Epoch 62/100: {'train_loss': 1.3073987551033497, 'val_event_loss': 0.5199059968644922, 'val_time_loss': 1.2979199945926667}
+[seed 0] Epoch 63/100: {'train_loss': 1.2873075602110475, 'val_event_loss': 0.5125298101793636, 'val_time_loss': 1.2975407524542375}
+[seed 0] Epoch 64/100: {'train_loss': 1.3286514389328659, 'val_event_loss': 0.5257625261490996, 'val_time_loss': 1.3605080851099707}
+[seed 0] Epoch 65/100: {'train_loss': 2.0218030847609043, 'val_event_loss': 0.5668345307761973, 'val_time_loss': 1.3289392644708806}
+[seed 0] Epoch 66/100: {'train_loss': 1.4403523043729365, 'val_event_loss': 0.532371009412137, 'val_time_loss': 1.2730397381565788}
+[seed 0] Epoch 67/100: {'train_loss': 1.538662709761411, 'val_event_loss': 0.5261867931620641, 'val_time_loss': 1.2763913544741543}
+[seed 0] Epoch 68/100: {'train_loss': 1.3397282478399575, 'val_event_loss': 0.5287770301103591, 'val_time_loss': 1.280969629504464}
+[seed 0] Epoch 69/100: {'train_loss': 1.2573571254033595, 'val_event_loss': 0.5188141411001032, 'val_time_loss': 1.3172906217249958}
+[seed 0] Epoch 70/100: {'train_loss': 1.6522469124756753, 'val_event_loss': 0.5213794987310063, 'val_time_loss': 1.293834736943245}
+[seed 0] Epoch 71/100: {'train_loss': 1.2373427809216082, 'val_event_loss': 0.522468988597393, 'val_time_loss': 1.3867862555113706}
+[seed 0] Epoch 72/100: {'train_loss': 1.5879105683416128, 'val_event_loss': 0.5323722495951436, 'val_time_loss': 1.2588935738260096}
+[seed 0] Epoch 73/100: {'train_loss': 1.3792552230879664, 'val_event_loss': 0.5350332243876024, 'val_time_loss': 1.324172657457265}
+[seed 0] Epoch 74/100: {'train_loss': 1.4376862025819719, 'val_event_loss': 0.5318927259607749, 'val_time_loss': 1.294603529843417}
+[seed 0] Epoch 75/100: {'train_loss': 1.4155490607954562, 'val_event_loss': 0.5288375040346925, 'val_time_loss': 1.3384799848903308}
+[seed 0] Epoch 76/100: {'train_loss': 1.3715425170958042, 'val_event_loss': 0.5339673100547357, 'val_time_loss': 1.2800974515351382}
+[seed 0] Epoch 77/100: {'train_loss': 1.303676069015637, 'val_event_loss': 0.5483166500926018, 'val_time_loss': 1.3630166601050984}
+[seed 0] Epoch 78/100: {'train_loss': 1.5183064956218004, 'val_event_loss': 0.5472075802358713, 'val_time_loss': 1.2493274049325422}
+[seed 0] Epoch 79/100: {'train_loss': 1.6392890317365527, 'val_event_loss': 0.5553457631306215, 'val_time_loss': 1.3053022948178379}
+[seed 0] Epoch 80/100: {'train_loss': 1.357749286107719, 'val_event_loss': 0.522430627589876, 'val_time_loss': 1.3171223962848837}
+[seed 0] Epoch 81/100: {'train_loss': 1.469288463704288, 'val_event_loss': 0.5405244511636821, 'val_time_loss': 1.255658384886655}
+[seed 0] Epoch 82/100: {'train_loss': 1.6368960165418684, 'val_event_loss': 0.5388718528503721, 'val_time_loss': 1.2478455131704158}
+[seed 0] Epoch 83/100: {'train_loss': 1.5045310747809708, 'val_event_loss': 0.527621421421116, 'val_time_loss': 1.2870900452136993}
+[seed 0] Epoch 84/100: {'train_loss': 1.5185409053228796, 'val_event_loss': 0.5348329014398835, 'val_time_loss': 1.3257030069828033}
+[seed 0] Epoch 85/100: {'train_loss': 1.5164186228066683, 'val_event_loss': 0.5281691979278218, 'val_time_loss': 1.236320784687996}
+[seed 0] Epoch 86/100: {'train_loss': 1.4242258910089731, 'val_event_loss': 0.5293526241725142, 'val_time_loss': 1.3269733079455115}
+[seed 0] Epoch 87/100: {'train_loss': 1.5468671028502285, 'val_event_loss': 0.5384058990939097, 'val_time_loss': 1.2893507112156262}
+[seed 0] Epoch 88/100: {'train_loss': 1.5105744046159089, 'val_event_loss': 0.5185383742505854, 'val_time_loss': 1.2684491734613073}
+[seed 0] Epoch 89/100: {'train_loss': 1.3528677360154688, 'val_event_loss': 0.5210966940630566, 'val_time_loss': 1.2404781300913204}
+[seed 0] Epoch 90/100: {'train_loss': 1.291785425040871, 'val_event_loss': 0.5234354617920789, 'val_time_loss': 1.2592187962748789}
+[seed 0] Epoch 91/100: {'train_loss': 1.3514071931131184, 'val_event_loss': 0.5272539283741604, 'val_time_loss': 1.3007931462743065}
+[seed 0] Epoch 92/100: {'train_loss': 1.447971235960722, 'val_event_loss': 0.5229570597410202, 'val_time_loss': 1.3505774156613783}
+[seed 0] Epoch 93/100: {'train_loss': 1.4897822295315564, 'val_event_loss': 0.5332223786549135, 'val_time_loss': 1.2765779381448572}
+[seed 0] Epoch 94/100: {'train_loss': 1.4931499459780753, 'val_event_loss': 0.5272282094440677, 'val_time_loss': 1.2744098316539418}
+[seed 0] Epoch 95/100: {'train_loss': 1.5697585809975863, 'val_event_loss': 0.5279237034645947, 'val_time_loss': 1.261571263183247}
+[seed 0] Epoch 96/100: {'train_loss': 1.4101030784659088, 'val_event_loss': 0.5260673256082968, 'val_time_loss': 1.2539256301793185}
+[seed 0] Epoch 97/100: {'train_loss': 1.4715979229658842, 'val_event_loss': 0.5363497564738448, 'val_time_loss': 1.2906780023466458}
+[seed 0] Epoch 98/100: {'train_loss': 1.4988189144060016, 'val_event_loss': 0.5335956547747959, 'val_time_loss': 1.2809232663024555}
+[seed 0] Epoch 99/100: {'train_loss': 1.3925205641426146, 'val_event_loss': 0.5322967028075999, 'val_time_loss': 1.328677248954773}
+[seed 0] Epoch 100/100: {'train_loss': 1.3550631070975214, 'val_event_loss': 0.5228726548904722, 'val_time_loss': 1.2995369710705498}
+[seed 0] Best validation event loss: 0.5125 at epoch 63/100. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.6188620912757787, 'test_time_loss': 1.2805268523367968, 'best_epoch': 63}
+[seed 0] Saved checkpoint to checkpoint_big.pt
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --d_model 128 --num_layers 3 --checkpoint checkpoint_big.ptython3 sanity_check_step2.py --checkpoint checkpoint_big.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+usage: train.py [-h] [--data DATA] [--seq_len SEQ_LEN] [--d_model D_MODEL] [--nhead NHEAD]
+                [--num_layers NUM_LAYERS] [--num_event_types NUM_EVENT_TYPES]
+                [--batch_size BATCH_SIZE] [--epochs EPOCHS] [--lr LR]
+                [--time_loss_weight TIME_LOSS_WEIGHT] [--val_fraction VAL_FRACTION]
+                [--test_fraction TEST_FRACTION] [--num_sim_systems NUM_SIM_SYSTEMS]
+                [--regenerate_each_epoch] [--checkpoint CHECKPOINT] [--run_dir RUN_DIR] [--seed SEED]
+                [--n_seeds N_SEEDS]
+train.py: error: unrecognized arguments: sanity_check_step2.py --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+harukana_0317@Mac MA02 % python3 sanity_check_step2.py --checkpoint checkpoint_big.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+============================================================
+STEP 2 SANITY CHECK: G/G/1 queue (single server, Gamma-distributed)
+============================================================
+Ground-truth parameters: arrival ~ Gamma(shape=2.0, scale=40.0s) [mean=80.0s], service ~ Gamma(shape=2.0, scale=25.0s) [mean=50.0s]
+Utilisation (rho) = 0.62 (STABLE)
+
+--- GROUND TRUTH (fresh G/G/1 draw) ---
+  Customers observed:      300
+  Observation span:        361.9 minutes
+  Arrival rate:            0.829 customers/min
+  Service rate:            0.862 customers/min per server
+  Wait time (Arrival->Order): mean=14.3s  std=12.0s  min=0.4s  max=72.7s  (n=300)
+  Service time (Order->Leave): mean=69.6s  std=48.8s  min=2.6s  max=277.3s  (n=300)
+  Cycle time (Arrival->Leave): mean=84.0s  std=57.7s  min=3.3s  max=323.3s  (n=300)
+  Little's Law (L = arrival_rate x mean cycle time): ~1.16 customers in the system on average (waiting + being served)
+  Theoretical utilisation with 1 server(s): rho = 0.96 -- < 1.0, consistent with a stable classical queueing system at this server count.
+
+--- TRANSFORMER (trained on G/G/1 data) ---
+  Customers observed:      302
+  Observation span:        433.4 minutes
+  Arrival rate:            0.697 customers/min
+  Service rate:            0.290 customers/min per server
+  Wait time (Arrival->Order): mean=84.5s  std=71.9s  min=4.3s  max=458.1s  (n=300)
+  Service time (Order->Leave): mean=206.7s  std=142.0s  min=24.0s  max=634.6s  (n=300)
+  Cycle time (Arrival->Leave): mean=289.4s  std=178.2s  min=8.7s  max=801.4s  (n=302)
+  Little's Law (L = arrival_rate x mean cycle time): ~3.36 customers in the system on average (waiting + being served)
+
+#################################################
+# TRANSFORMER vs GROUND TRUTH
+#################################################
+
+--- Cycle time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   83.97s  std=   57.75s
+  Transformer: n= 302  mean=  289.41s  std=  178.21s
+  Welch's t-test:  t=-19.051, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.711, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Wait time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   14.33s  std=   11.98s
+  Transformer: n= 300  mean=   84.55s  std=   71.94s
+  Welch's t-test:  t=-16.675, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.637, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Service time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   69.64s  std=   48.77s
+  Transformer: n= 300  mean=  206.73s  std=  142.01s
+  Welch's t-test:  t=-15.814, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.657, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Repeated over 10 random seeds ---
+
+--- Transformer vs ground truth: cycle time: repeated over 10 random seeds ---
+  Real mean:                    84.0s
+  Simulated mean (across 10 runs):    467.2s  ± 272.0s (1 std dev across runs)
+  Gap:                        +383.3s
+  One-sample t-test (H0: simulated runs average to the real mean): t=4.456, p=0.0016  (simulated mean reliably differs from real mean)
+
+#################################################
+# VERDICT
+#################################################
+If the tests above mostly show p > 0.05 ('consistent' / 'NOT significantly
+different'), the model has learned useful structure from a real (if simple)
+queueing process with genuine contention, and it is reasonable to move on
+to Step 3 (parallel servers / tandem structures — already explored against
+real data in Section 3.3-3.4).
+If they show strong, consistent significant differences but Step 1 passed,
+the issue is specifically in learning QUEUEING dynamics (contention/waiting)
+rather than the pipeline itself — consider more training, more data, or a
+larger model (d_model / num_layers).
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 2 --num_sim_systems 5 --seed 0 --time_head lognormal --checkpoint smoke.pt
+[seed 0] Generating 5 G/G/1 single-server systems...
+[seed 0] train=3 val=1 test=1 systems
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.83, std=1.19
+[seed 0] Epoch 1/2: {'train_loss': 5.251705655184659, 'val_event_loss': 0.6653971232865986, 'val_time_loss': 4.561100181780364}
+[seed 0] Epoch 2/2: {'train_loss': 4.767835513028231, 'val_event_loss': 0.6481822666368986, 'val_time_loss': 4.632268027255409}
+[seed 0] Best validation loss (event + time NLL): 5.2265 at epoch 1/2. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.6140706186231814, 'test_time_loss': 4.348896528545179, 'best_epoch': 1}
+[seed 0] Saved checkpoint to smoke.pt
+harukana_0317@Mac MA02 % python3 sanity_check_step2.py --checkpoint smoke.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+============================================================
+STEP 2 SANITY CHECK: G/G/1 queue (single server, Gamma-distributed)
+============================================================
+Ground-truth parameters: arrival ~ Gamma(shape=2.0, scale=40.0s) [mean=80.0s], service ~ Gamma(shape=2.0, scale=25.0s) [mean=50.0s]
+Utilisation (rho) = 0.62 (STABLE)
+
+--- GROUND TRUTH (fresh G/G/1 draw) ---
+  Customers observed:      300
+  Observation span:        361.9 minutes
+  Arrival rate:            0.829 customers/min
+  Service rate:            0.862 customers/min per server
+  Wait time (Arrival->Order): mean=14.3s  std=12.0s  min=0.4s  max=72.7s  (n=300)
+  Service time (Order->Leave): mean=69.6s  std=48.8s  min=2.6s  max=277.3s  (n=300)
+  Cycle time (Arrival->Leave): mean=84.0s  std=57.7s  min=3.3s  max=323.3s  (n=300)
+  Little's Law (L = arrival_rate x mean cycle time): ~1.16 customers in the system on average (waiting + being served)
+  Theoretical utilisation with 1 server(s): rho = 0.96 -- < 1.0, consistent with a stable classical queueing system at this server count.
+
+--- TRANSFORMER (trained on G/G/1 data) ---
+  Customers observed:      292
+  Observation span:        660.2 minutes
+  Arrival rate:            0.442 customers/min
+  Service rate:            0.143 customers/min per server
+  Wait time (Arrival->Order): mean=119.5s  std=166.0s  min=0.0s  max=892.5s  (n=281)
+  Service time (Order->Leave): mean=420.1s  std=501.2s  min=2.6s  max=2546.9s  (n=281)
+  Cycle time (Arrival->Leave): mean=521.9s  std=543.3s  min=4.1s  max=2646.5s  (n=292)
+  Little's Law (L = arrival_rate x mean cycle time): ~3.85 customers in the system on average (waiting + being served)
+
+#################################################
+# TRANSFORMER vs GROUND TRUTH
+#################################################
+
+--- Cycle time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   83.97s  std=   57.75s
+  Transformer: n= 292  mean=  521.93s  std=  543.34s
+  Welch's t-test:  t=-13.699, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.611, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Wait time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   14.33s  std=   11.98s
+  Transformer: n= 281  mean=  119.48s  std=  166.03s
+  Welch's t-test:  t=-10.591, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.436, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Service time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   69.64s  std=   48.77s
+  Transformer: n= 281  mean=  420.12s  std=  501.22s
+  Welch's t-test:  t=-11.670, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.498, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Repeated over 10 random seeds ---
+
+--- Transformer vs ground truth: cycle time: repeated over 10 random seeds ---
+  Real mean:                    84.0s
+  Simulated mean (across 10 runs):    955.8s  ± 715.3s (1 std dev across runs)
+  Gap:                        +871.8s
+  One-sample t-test (H0: simulated runs average to the real mean): t=3.855, p=0.0039  (simulated mean reliably differs from real mean)
+
+#################################################
+# VERDICT
+#################################################
+If the tests above mostly show p > 0.05 ('consistent' / 'NOT significantly
+different'), the model has learned useful structure from a real (if simple)
+queueing process with genuine contention, and it is reasonable to move on
+to Step 3 (parallel servers / tandem structures — already explored against
+real data in Section 3.3-3.4).
+If they show strong, consistent significant differences but Step 1 passed,
+the issue is specifically in learning QUEUEING dynamics (contention/waiting)
+rather than the pipeline itself — consider more training, more data, or a
+larger model (d_model / num_layers).
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --checkpoint checkpoint_nll.pt
+[seed 0] Generating 20 G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.70, std=1.10
+[seed 0] Epoch 1/100: {'train_loss': 4.931083945557475, 'val_event_loss': 0.6213547086173837, 'val_time_loss': 4.102578041770242}
+[seed 0] Epoch 2/100: {'train_loss': 4.526320511475205, 'val_event_loss': 0.5526609431613575, 'val_time_loss': 4.077230427481911}
+[seed 0] Epoch 3/100: {'train_loss': 4.686872571706772, 'val_event_loss': 0.5427932770414786, 'val_time_loss': 4.063320055874911}
+[seed 0] Epoch 4/100: {'train_loss': 4.848034026101232, 'val_event_loss': 0.5601674070412462, 'val_time_loss': 4.070413944937966}
+[seed 0] Epoch 5/100: {'train_loss': 4.715571107342839, 'val_event_loss': 0.5403371313756162, 'val_time_loss': 4.055771966414018}
+[seed 0] Epoch 6/100: {'train_loss': 4.754885356873274, 'val_event_loss': 0.547970891811631, 'val_time_loss': 4.045742607116699}
+[seed 0] Epoch 7/100: {'train_loss': 4.85300013795495, 'val_event_loss': 0.5558785672892224, 'val_time_loss': 4.072296892512928}
+[seed 0] Epoch 8/100: {'train_loss': 4.708474909886718, 'val_event_loss': 0.5536672528494488, 'val_time_loss': 4.050082263079557}
+[seed 0] Epoch 9/100: {'train_loss': 4.642830299213529, 'val_event_loss': 0.542149497026747, 'val_time_loss': 4.06368014162237}
+[seed 0] Epoch 10/100: {'train_loss': 4.552990449592471, 'val_event_loss': 0.5368576488711617, 'val_time_loss': 4.034212090752342}
+[seed 0] Epoch 11/100: {'train_loss': 4.569154512137175, 'val_event_loss': 0.5334639674560591, 'val_time_loss': 4.035177703337236}
+[seed 0] Epoch 12/100: {'train_loss': 4.723377820104361, 'val_event_loss': 0.5226617124947635, 'val_time_loss': 4.030123550241644}
+[seed 0] Epoch 13/100: {'train_loss': 4.6468376740813255, 'val_event_loss': 0.5459934551607478, 'val_time_loss': 4.045624286478216}
+[seed 0] Epoch 14/100: {'train_loss': 4.7495117746293545, 'val_event_loss': 0.540083568204533, 'val_time_loss': 4.036405164545233}
+[seed 0] Epoch 15/100: {'train_loss': 4.694728672504425, 'val_event_loss': 0.5546604656360367, 'val_time_loss': 4.035460597818548}
+[seed 0] Epoch 16/100: {'train_loss': 4.621093140915036, 'val_event_loss': 0.5497867586260492, 'val_time_loss': 4.034519668058915}
+[seed 0] Epoch 17/100: {'train_loss': 4.7523609064519405, 'val_event_loss': 0.5288827440278097, 'val_time_loss': 4.034914463216608}
+[seed 0] Epoch 18/100: {'train_loss': 4.530328750610352, 'val_event_loss': 0.5400488784367388, 'val_time_loss': 4.037829078327526}
+[seed 0] Epoch 19/100: {'train_loss': 4.576067075133324, 'val_event_loss': 0.5417487481778318, 'val_time_loss': 4.034449477629228}
+[seed 0] Epoch 20/100: {'train_loss': 4.906485095620155, 'val_event_loss': 0.5328739250248129, 'val_time_loss': 4.070988646420566}
+[seed 0] Epoch 21/100: {'train_loss': 4.833418179303408, 'val_event_loss': 0.5392359305511821, 'val_time_loss': 4.048313045501709}
+[seed 0] Epoch 22/100: {'train_loss': 4.62508263066411, 'val_event_loss': 0.5302828928286379, 'val_time_loss': 4.034552842920477}
+[seed 0] Epoch 23/100: {'train_loss': 4.821347609162331, 'val_event_loss': 0.5300777112218467, 'val_time_loss': 4.052204253456809}
+[seed 0] Epoch 24/100: {'train_loss': 4.898500043898821, 'val_event_loss': 0.5354504803364927, 'val_time_loss': 4.05238336649808}
+[seed 0] Epoch 25/100: {'train_loss': 4.923333177343011, 'val_event_loss': 0.540690754354, 'val_time_loss': 4.04458741274747}
+[seed 0] Epoch 26/100: {'train_loss': 4.592186784371734, 'val_event_loss': 0.5373596828092229, 'val_time_loss': 4.034093947844072}
+[seed 0] Epoch 27/100: {'train_loss': 4.424397315829992, 'val_event_loss': 0.5341535972600634, 'val_time_loss': 4.035443050211126}
+[seed 0] Epoch 28/100: {'train_loss': 4.491861920803785, 'val_event_loss': 0.541155577857386, 'val_time_loss': 4.034281028400768}
+[seed 0] Epoch 29/100: {'train_loss': 4.463233904913068, 'val_event_loss': 0.5366514997048811, 'val_time_loss': 4.0360113794153385}
+[seed 0] Epoch 30/100: {'train_loss': 4.741178993135691, 'val_event_loss': 0.5259135177866979, 'val_time_loss': 4.056388295780529}
+[seed 0] Epoch 31/100: {'train_loss': 4.867032513022423, 'val_event_loss': 0.5343009716407819, 'val_time_loss': 4.064170364900069}
+[seed 0] Epoch 32/100: {'train_loss': 4.802920779213309, 'val_event_loss': 0.539935582334345, 'val_time_loss': 4.036065366051414}
+[seed 0] Epoch 33/100: {'train_loss': 4.712683875113726, 'val_event_loss': 0.5370009729130701, 'val_time_loss': 4.057203557274558}
+[seed 0] Epoch 34/100: {'train_loss': 4.708394579589367, 'val_event_loss': 0.5372831943360242, 'val_time_loss': 4.05106464732777}
+[seed 0] Epoch 35/100: {'train_loss': 4.650411281734705, 'val_event_loss': 0.5293092665347185, 'val_time_loss': 4.027750665491277}
+[seed 0] Epoch 36/100: {'train_loss': 4.578209049999714, 'val_event_loss': 0.53795983357863, 'val_time_loss': 4.03168588551608}
+[seed 0] Epoch 37/100: {'train_loss': 4.833714224398136, 'val_event_loss': 0.5439971248534593, 'val_time_loss': 4.0565674998543475}
+[seed 0] Epoch 38/100: {'train_loss': 4.726683687418699, 'val_event_loss': 0.5339509350332347, 'val_time_loss': 4.021635354648937}
+[seed 0] Epoch 39/100: {'train_loss': 4.424664570018649, 'val_event_loss': 0.5409103285182606, 'val_time_loss': 4.044129718433727}
+[seed 0] Epoch 40/100: {'train_loss': 4.847866540774703, 'val_event_loss': 0.5288672498681328, 'val_time_loss': 4.062522450360385}
+[seed 0] Epoch 41/100: {'train_loss': 4.64804601855576, 'val_event_loss': 0.5328223206102848, 'val_time_loss': 4.033955903486772}
+[seed 0] Epoch 42/100: {'train_loss': 4.311374234035611, 'val_event_loss': 0.5304501595822247, 'val_time_loss': 4.039898759668524}
+[seed 0] Epoch 43/100: {'train_loss': 4.833245383575559, 'val_event_loss': 0.5265847528522665, 'val_time_loss': 4.064403672651811}
+[seed 0] Epoch 44/100: {'train_loss': 4.548623876646161, 'val_event_loss': 0.5491799762303179, 'val_time_loss': 4.045013158971613}
+[seed 0] Epoch 45/100: {'train_loss': 4.666561629623175, 'val_event_loss': 0.5218952120027759, 'val_time_loss': 4.03813891844316}
+[seed 0] Epoch 46/100: {'train_loss': 4.509210946038365, 'val_event_loss': 0.5277444164184006, 'val_time_loss': 4.0231078971516006}
+[seed 0] Epoch 47/100: {'train_loss': 4.6146352756768465, 'val_event_loss': 0.530553098293868, 'val_time_loss': 4.029082588715987}
+[seed 0] Epoch 48/100: {'train_loss': 4.634648635983467, 'val_event_loss': 0.5237791351296684, 'val_time_loss': 4.045433339205656}
+[seed 0] Epoch 49/100: {'train_loss': 4.778708143159747, 'val_event_loss': 0.5323322174223987, 'val_time_loss': 4.030511327223344}
+[seed 0] Epoch 50/100: {'train_loss': 4.853448387235403, 'val_event_loss': 0.5327296275984157, 'val_time_loss': 4.061760117790916}
+[seed 0] Epoch 51/100: {'train_loss': 4.737154940143228, 'val_event_loss': 0.5283491595224901, 'val_time_loss': 4.034033805673773}
+[seed 0] Epoch 52/100: {'train_loss': 4.631835853680968, 'val_event_loss': 0.5157975370233709, 'val_time_loss': 4.0320460536263205}
+[seed 0] Epoch 53/100: {'train_loss': 4.746406989172101, 'val_event_loss': 0.5258951692418619, 'val_time_loss': 4.0734625772996385}
+[seed 0] Epoch 54/100: {'train_loss': 4.8572743609547615, 'val_event_loss': 0.5400432093576951, 'val_time_loss': 4.03852223482999}
+[seed 0] Epoch 55/100: {'train_loss': 4.743489537388086, 'val_event_loss': 0.5315657753836025, 'val_time_loss': 4.033974079652266}
+[seed 0] Epoch 56/100: {'train_loss': 4.619454687461257, 'val_event_loss': 0.53144781189886, 'val_time_loss': 4.045927368510853}
+[seed 0] Epoch 57/100: {'train_loss': 4.702624859288335, 'val_event_loss': 0.5261463097550653, 'val_time_loss': 4.037033159082586}
+[seed 0] Epoch 58/100: {'train_loss': 4.5378929022699594, 'val_event_loss': 0.5417884448712522, 'val_time_loss': 4.054508582028475}
+[seed 0] Epoch 59/100: {'train_loss': 4.684732764959335, 'val_event_loss': 0.5321054822341962, 'val_time_loss': 4.025652872432362}
+[seed 0] Epoch 60/100: {'train_loss': 4.534910557791591, 'val_event_loss': 0.5310688687319105, 'val_time_loss': 4.044282653115013}
+[seed 0] Epoch 61/100: {'train_loss': 4.892950963228941, 'val_event_loss': 0.5472795231098478, 'val_time_loss': 4.079396486282349}
+[seed 0] Epoch 62/100: {'train_loss': 4.688085068017244, 'val_event_loss': 0.519765687530691, 'val_time_loss': 4.050979505885731}
+[seed 0] Epoch 63/100: {'train_loss': 4.552447946742177, 'val_event_loss': 0.522444734248248, 'val_time_loss': 4.018315180865201}
+[seed 0] Epoch 64/100: {'train_loss': 4.678818015381694, 'val_event_loss': 0.5350106265734542, 'val_time_loss': 4.038100879842585}
+[seed 0] Epoch 65/100: {'train_loss': 4.834465030580759, 'val_event_loss': 0.5650611374188553, 'val_time_loss': 4.0599259679967705}
+[seed 0] Epoch 66/100: {'train_loss': 4.62700635381043, 'val_event_loss': 0.5341468972238628, 'val_time_loss': 4.046516591852361}
+[seed 0] Epoch 67/100: {'train_loss': 4.521328939124942, 'val_event_loss': 0.528684056753462, 'val_time_loss': 4.042235478487882}
+[seed 0] Epoch 68/100: {'train_loss': 4.740647956728935, 'val_event_loss': 0.5346936057914388, 'val_time_loss': 4.037581920623779}
+[seed 0] Epoch 69/100: {'train_loss': 4.623031936585903, 'val_event_loss': 0.529219621961767, 'val_time_loss': 4.02873288934881}
+[seed 0] Epoch 70/100: {'train_loss': 4.64106803946197, 'val_event_loss': 0.5179974293844266, 'val_time_loss': 4.03374947201122}
+[seed 0] Epoch 71/100: {'train_loss': 4.550683442503214, 'val_event_loss': 0.5225110250440511, 'val_time_loss': 4.04548399665139}
+[seed 0] Epoch 72/100: {'train_loss': 4.623527128249407, 'val_event_loss': 0.5271034473722631, 'val_time_loss': 4.029936994205822}
+[seed 0] Epoch 73/100: {'train_loss': 4.666541395708919, 'val_event_loss': 0.5308237758549776, 'val_time_loss': 4.045997511256825}
+[seed 0] Epoch 74/100: {'train_loss': 4.728236470371485, 'val_event_loss': 0.5329408502036875, 'val_time_loss': 4.048181148008867}
+[seed 0] Epoch 75/100: {'train_loss': 4.887041287496686, 'val_event_loss': 0.5228059830990704, 'val_time_loss': 4.046195749803023}
+[seed 0] Epoch 76/100: {'train_loss': 4.627394482493401, 'val_event_loss': 0.5381778662854975, 'val_time_loss': 4.029039083827626}
+[seed 0] Epoch 77/100: {'train_loss': 4.631736299023032, 'val_event_loss': 0.536589479310946, 'val_time_loss': 4.044342890652743}
+[seed 0] Epoch 78/100: {'train_loss': 4.664052184671164, 'val_event_loss': 0.5425224347548051, 'val_time_loss': 4.023959862102162}
+[seed 0] Epoch 79/100: {'train_loss': 4.811207491904497, 'val_event_loss': 0.5516554577106779, 'val_time_loss': 4.050571836124767}
+[seed 0] Epoch 80/100: {'train_loss': 4.6662885174155235, 'val_event_loss': 0.5257086088711566, 'val_time_loss': 4.035166241905906}
+[seed 0] Epoch 81/100: {'train_loss': 4.693544112145901, 'val_event_loss': 0.5312269945713607, 'val_time_loss': 4.026067933169278}
+[seed 0] Epoch 82/100: {'train_loss': 4.736930247396231, 'val_event_loss': 0.5422898991541429, 'val_time_loss': 4.042597367546775}
+[seed 0] Epoch 83/100: {'train_loss': 4.744092458859086, 'val_event_loss': 0.5246429453519258, 'val_time_loss': 4.0416018442674115}
+[seed 0] Epoch 84/100: {'train_loss': 4.739763831719756, 'val_event_loss': 0.5287296770648523, 'val_time_loss': 4.055420060591264}
+[seed 0] Epoch 85/100: {'train_loss': 4.798597054556012, 'val_event_loss': 0.5179595066065138, 'val_time_loss': 4.065822718360208}
+[seed 0] Epoch 86/100: {'train_loss': 4.7509515061974525, 'val_event_loss': 0.529012138328769, 'val_time_loss': 4.0470142451199616}
+[seed 0] Epoch 87/100: {'train_loss': 4.577754182741046, 'val_event_loss': 0.5291449205441908, 'val_time_loss': 4.0360536662015045}
+[seed 0] Epoch 88/100: {'train_loss': 4.77366753295064, 'val_event_loss': 0.5205988638780333, 'val_time_loss': 4.030006248300726}
+[seed 0] Epoch 89/100: {'train_loss': 4.488412139937282, 'val_event_loss': 0.5277547432617707, 'val_time_loss': 4.02653172232888}
+[seed 0] Epoch 90/100: {'train_loss': 4.593327436596155, 'val_event_loss': 0.5238998921757395, 'val_time_loss': 4.031520119580356}
+[seed 0] Epoch 91/100: {'train_loss': 4.738115141168237, 'val_event_loss': 0.5266840730201114, 'val_time_loss': 4.023255751349709}
+[seed 0] Epoch 92/100: {'train_loss': 4.855179976671934, 'val_event_loss': 0.5266447041522373, 'val_time_loss': 4.0302622404965485}
+[seed 0] Epoch 93/100: {'train_loss': 4.544927358627319, 'val_event_loss': 0.5383303748613054, 'val_time_loss': 4.0476737976074215}
+[seed 0] Epoch 94/100: {'train_loss': 4.510594218969345, 'val_event_loss': 0.5288785861297087, 'val_time_loss': 4.036240690404719}
+[seed 0] Epoch 95/100: {'train_loss': 4.784736951813102, 'val_event_loss': 0.5318040656772527, 'val_time_loss': 4.019735817475753}
+[seed 0] Epoch 96/100: {'train_loss': 4.684514978900552, 'val_event_loss': 0.5278470548716458, 'val_time_loss': 4.030260905352506}
+[seed 0] Epoch 97/100: {'train_loss': 4.77077685855329, 'val_event_loss': 0.5413823272016915, 'val_time_loss': 4.031953547217629}
+[seed 0] Epoch 98/100: {'train_loss': 4.663139760494232, 'val_event_loss': 0.5283137755637819, 'val_time_loss': 4.040341659025713}
+[seed 0] Epoch 99/100: {'train_loss': 4.596694642677903, 'val_event_loss': 0.5297944837673144, 'val_time_loss': 4.029381804032759}
+[seed 0] Epoch 100/100: {'train_loss': 4.593637304380536, 'val_event_loss': 0.5267367549917915, 'val_time_loss': 4.049370995434848}
+[seed 0] Best validation loss (event + time NLL): 4.5408 at epoch 63/100. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.6334625058553436, 'test_time_loss': 4.5114141897721725, 'best_epoch': 63}
+[seed 0] Saved checkpoint to checkpoint_nll.pt
+harukana_0317@Mac MA02 % python3 sanity_check_step2.py --checkpoint checkpoint_nll.pt --arrival_shape 2.0 --arrival_scale 40 --service_shape 2.0 --service_scale 25
+============================================================
+STEP 2 SANITY CHECK: G/G/1 queue (single server, Gamma-distributed)
+============================================================
+Ground-truth parameters: arrival ~ Gamma(shape=2.0, scale=40.0s) [mean=80.0s], service ~ Gamma(shape=2.0, scale=25.0s) [mean=50.0s]
+Utilisation (rho) = 0.62 (STABLE)
+
+--- GROUND TRUTH (fresh G/G/1 draw) ---
+  Customers observed:      300
+  Observation span:        361.9 minutes
+  Arrival rate:            0.829 customers/min
+  Service rate:            0.862 customers/min per server
+  Wait time (Arrival->Order): mean=14.3s  std=12.0s  min=0.4s  max=72.7s  (n=300)
+  Service time (Order->Leave): mean=69.6s  std=48.8s  min=2.6s  max=277.3s  (n=300)
+  Cycle time (Arrival->Leave): mean=84.0s  std=57.7s  min=3.3s  max=323.3s  (n=300)
+  Little's Law (L = arrival_rate x mean cycle time): ~1.16 customers in the system on average (waiting + being served)
+  Theoretical utilisation with 1 server(s): rho = 0.96 -- < 1.0, consistent with a stable classical queueing system at this server count.
+
+--- TRANSFORMER (trained on G/G/1 data) ---
+  Customers observed:      300
+  Observation span:        535.4 minutes
+  Arrival rate:            0.560 customers/min
+  Service rate:            0.692 customers/min per server
+  Wait time (Arrival->Order): mean=50.8s  std=101.3s  min=0.0s  max=761.3s  (n=291)
+  Service time (Order->Leave): mean=86.7s  std=96.4s  min=0.5s  max=629.5s  (n=291)
+  Cycle time (Arrival->Leave): mean=134.8s  std=157.5s  min=0.5s  max=933.6s  (n=300)
+  Little's Law (L = arrival_rate x mean cycle time): ~1.26 customers in the system on average (waiting + being served)
+
+#################################################
+# TRANSFORMER vs GROUND TRUTH
+#################################################
+
+--- Cycle time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   83.97s  std=   57.75s
+  Transformer: n= 300  mean=  134.76s  std=  157.46s
+  Welch's t-test:  t=-5.246, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.167, p=0.0005  (distributions look significantly different at alpha=0.05)
+
+--- Wait time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   14.33s  std=   11.98s
+  Transformer: n= 291  mean=   50.77s  std=  101.27s
+  Welch's t-test:  t=-6.098, p=0.0000  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.237, p=0.0000  (distributions look significantly different at alpha=0.05)
+
+--- Service time: Ground truth vs. Transformer ---
+  Ground truth: n= 300  mean=   69.64s  std=   48.77s
+  Transformer: n= 291  mean=   86.68s  std=   96.39s
+  Welch's t-test:  t=-2.699, p=0.0072  (means ARE significantly different at alpha=0.05)
+  KS test:         D=0.111, p=0.0482  (distributions look significantly different at alpha=0.05)
+
+--- Repeated over 10 random seeds ---
+
+--- Transformer vs ground truth: cycle time: repeated over 10 random seeds ---
+  Real mean:                    84.0s
+  Simulated mean (across 10 runs):    459.0s  ± 238.7s (1 std dev across runs)
+  Gap:                        +375.0s
+  One-sample t-test (H0: simulated runs average to the real mean): t=4.969, p=0.0008  (simulated mean reliably differs from real mean)
+
+#################################################
+# VERDICT
+#################################################
+If the tests above mostly show p > 0.05 ('consistent' / 'NOT significantly
+different'), the model has learned useful structure from a real (if simple)
+queueing process with genuine contention, and it is reasonable to move on
+to Step 3 (parallel servers / tandem structures — already explored against
+real data in Section 3.3-3.4).
+If they show strong, consistent significant differences but Step 1 passed,
+the issue is specifically in learning QUEUEING dynamics (contention/waiting)
+rather than the pipeline itself — consider more training, more data, or a
+larger model (d_model / num_layers).
+harukana_0317@Mac MA02 % python3 diagnose_generation.py --checkpoint checkpoint_nll.pt
+Checkpoint: checkpoint_nll.pt | time head: lognormal | generating 10 runs of 900 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.5      5      0     0 |     0     0     0 |  300 |     84.0    70.6 |    97.8     57.0
+gen 0    33.2  32.9  34.0 |   -2.4      7     -7   609 |     8    11     4 |  300 |    134.8    80.9 |   233.7     89.7
+gen 1    25.9  27.1  47.1 |  -17.3     11   -194   247 |    26   194     0 |  237 |    473.5   492.6 |   441.3    271.2
+gen 2    12.1  15.5  72.4 | -177.9      8   -552   607 |    34   552     0 |  111 |    255.1   129.3 |    98.0    544.7
+gen 3    18.7  20.0  61.4 | -205.1      8   -391   686 |    28   392     1 |  170 |    224.1   149.9 |   379.2     58.3
+gen 4    30.1  31.1  38.8 |  -35.7     11    -79   484 |    18    87     8 |  268 |    516.1   468.6 |   476.8    628.4
+gen 5    34.2  32.0  33.8 |    3.3     16      3   168 |     3     5     8 |  305 |    585.9   447.3 |    74.1   1043.9
+gen 6    24.1  24.1  51.7 |  -32.7     12   -253   255 |     4   253     0 |  221 |    371.4   287.9 |   218.0    594.0
+gen 7    25.7  27.9  46.4 |  -41.0      9   -190   334 |    26   196     6 |  229 |    478.4   451.4 |   414.4    471.5
+gen 8    29.4  29.6  41.0 |   -7.2      7   -107   548 |    19   107     0 |  269 |    572.0   422.4 |   365.7   1022.2
+gen 9    33.8  33.4  32.8 |    4.2     18     10   337 |     7    10    20 |  290 |    979.0   686.9 |   174.2   1827.9
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       38.1      10.7      24.0
+generated (avg runs)        47.7      16.7      55.2
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 135, 473, 255, 224, 516, 586, 371, 478, 572, 979
+truth cycle mean: 84.0s | median of run means: 475.9s | runs with mean > 2x truth: 9 of 10
+runs containing impossible states (N<0 or orphan events): 10 of 10
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 60 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --seq_len 48 --checkpoint checkpoint_len48.pt
+[seed 0] Generating 20 G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.69, std=1.10
+[seed 0] Epoch 1/60: {'train_loss': 4.896053611739608, 'val_event_loss': 0.6590334197076467, 'val_time_loss': 4.076080909142127}
+[seed 0] Epoch 2/60: {'train_loss': 4.514300202535203, 'val_event_loss': 0.533756997436285, 'val_time_loss': 4.028067795129923}
+[seed 0] Epoch 3/60: {'train_loss': 4.6267326016071415, 'val_event_loss': 0.5105548549730045, 'val_time_loss': 4.03406095963258}
+[seed 0] Epoch 4/60: {'train_loss': 4.7760453243886145, 'val_event_loss': 0.5170127557447324, 'val_time_loss': 4.029807168703813}
+[seed 0] Epoch 5/60: {'train_loss': 4.63673861164692, 'val_event_loss': 0.5146871868234414, 'val_time_loss': 4.057730569289281}
+[seed 0] Epoch 6/60: {'train_loss': 4.67018499847286, 'val_event_loss': 0.5002223857893393, 'val_time_loss': 4.016669575984661}
+[seed 0] Epoch 7/60: {'train_loss': 4.76005586513803, 'val_event_loss': 0.5148000844682639, 'val_time_loss': 4.031466479484852}
+[seed 0] Epoch 8/60: {'train_loss': 4.622608770023692, 'val_event_loss': 0.5222564270863166, 'val_time_loss': 4.027257525003874}
+[seed 0] Epoch 9/60: {'train_loss': 4.553763097967983, 'val_event_loss': 0.5087708918234477, 'val_time_loss': 4.039511313805213}
+[seed 0] Epoch 10/60: {'train_loss': 4.466796599143793, 'val_event_loss': 0.4913394216161508, 'val_time_loss': 4.018232084237612}
+[seed 0] Epoch 11/60: {'train_loss': 4.476189120741915, 'val_event_loss': 0.4933662053484183, 'val_time_loss': 4.022580719911135}
+[seed 0] Epoch 12/60: {'train_loss': 4.625925570480095, 'val_event_loss': 0.49830857291817665, 'val_time_loss': 4.020282053030455}
+[seed 0] Epoch 13/60: {'train_loss': 4.562832006738206, 'val_event_loss': 0.5143478772101494, 'val_time_loss': 4.0350496264604425}
+[seed 0] Epoch 14/60: {'train_loss': 4.6587189938411235, 'val_event_loss': 0.5052067342285926, 'val_time_loss': 4.034995785126319}
+[seed 0] Epoch 15/60: {'train_loss': 4.612944790154449, 'val_event_loss': 0.5196950414146368, 'val_time_loss': 4.028729768899771}
+[seed 0] Epoch 16/60: {'train_loss': 4.525197145367457, 'val_event_loss': 0.5193227751610371, 'val_time_loss': 4.049403704129732}
+[seed 0] Epoch 17/60: {'train_loss': 4.665312987713774, 'val_event_loss': 0.49244291722201383, 'val_time_loss': 4.031213581562042}
+[seed 0] Epoch 18/60: {'train_loss': 4.449780357770683, 'val_event_loss': 0.5098220485334213, 'val_time_loss': 4.0354879544331475}
+[seed 0] Epoch 19/60: {'train_loss': 4.488001350528938, 'val_event_loss': 0.49592737309061563, 'val_time_loss': 4.025805908900041}
+[seed 0] Epoch 20/60: {'train_loss': 4.81173436503765, 'val_event_loss': 0.5021895837898438, 'val_time_loss': 4.041903417844039}
+[seed 0] Epoch 21/60: {'train_loss': 4.7332574749781084, 'val_event_loss': 0.5142123591727935, 'val_time_loss': 4.04678777547983}
+[seed 0] Epoch 22/60: {'train_loss': 4.539913823781919, 'val_event_loss': 0.4950101295342812, 'val_time_loss': 4.024683750592745}
+[seed 0] Epoch 23/60: {'train_loss': 4.719611889074657, 'val_event_loss': 0.4854078867401068, 'val_time_loss': 4.045301143939678}
+[seed 0] Epoch 24/60: {'train_loss': 4.7919268253421, 'val_event_loss': 0.48941815458238125, 'val_time_loss': 4.0285885104766255}
+[seed 0] Epoch 25/60: {'train_loss': 4.8149775099163215, 'val_event_loss': 0.5084851389894118, 'val_time_loss': 4.054284756000225}
+[seed 0] Epoch 26/60: {'train_loss': 4.496226472302902, 'val_event_loss': 0.49983676322377646, 'val_time_loss': 4.0309863319763775}
+[seed 0] Epoch 27/60: {'train_loss': 4.332887627861717, 'val_event_loss': 0.5128454759430426, 'val_time_loss': 4.041647145381341}
+[seed 0] Epoch 28/60: {'train_loss': 4.398857213248891, 'val_event_loss': 0.5211574003960078, 'val_time_loss': 4.038951254807985}
+[seed 0] Epoch 29/60: {'train_loss': 4.370657948423023, 'val_event_loss': 0.5033174435106608, 'val_time_loss': 4.026308027597574}
+[seed 0] Epoch 30/60: {'train_loss': 4.645322919877107, 'val_event_loss': 0.5018907822668552, 'val_time_loss': 4.056596554242647}
+[seed 0] Epoch 31/60: {'train_loss': 4.766114642797422, 'val_event_loss': 0.5017487766364446, 'val_time_loss': 4.054005774167868}
+[seed 0] Epoch 32/60: {'train_loss': 4.707532488610133, 'val_event_loss': 0.5049213987703507, 'val_time_loss': 4.062156580961668}
+[seed 0] Epoch 33/60: {'train_loss': 4.613265683828306, 'val_event_loss': 0.5247271012228268, 'val_time_loss': 4.063619737441723}
+[seed 0] Epoch 34/60: {'train_loss': 4.60619910886465, 'val_event_loss': 0.51361054683534, 'val_time_loss': 4.049185427335592}
+[seed 0] Epoch 35/60: {'train_loss': 4.555169915364793, 'val_event_loss': 0.5000958366749378, 'val_time_loss': 4.020877952759083}
+[seed 0] Epoch 36/60: {'train_loss': 4.469959416665321, 'val_event_loss': 0.5110663742973254, 'val_time_loss': 4.0326785536912775}
+[seed 0] Epoch 37/60: {'train_loss': 4.739293882669497, 'val_event_loss': 0.503167403002198, 'val_time_loss': 4.058266607614664}
+[seed 0] Epoch 38/60: {'train_loss': 4.6298483383557025, 'val_event_loss': 0.5034366795936456, 'val_time_loss': 4.014173672749446}
+[seed 0] Epoch 39/60: {'train_loss': 4.340119379611055, 'val_event_loss': 0.502180409259521, 'val_time_loss': 4.027452711875622}
+[seed 0] Epoch 40/60: {'train_loss': 4.7536696126638365, 'val_event_loss': 0.5066601258630936, 'val_time_loss': 4.069301284276522}
+[seed 0] Epoch 41/60: {'train_loss': 4.550447261037905, 'val_event_loss': 0.5026802804607612, 'val_time_loss': 4.038479318985572}
+[seed 0] Epoch 42/60: {'train_loss': 4.22053838958425, 'val_event_loss': 0.4929374096771845, 'val_time_loss': 4.0285601524206305}
+[seed 0] Epoch 43/60: {'train_loss': 4.73777178890449, 'val_event_loss': 0.5074739208301673, 'val_time_loss': 4.089309376019698}
+[seed 0] Epoch 44/60: {'train_loss': 4.456689046434135, 'val_event_loss': 0.548257832773603, 'val_time_loss': 4.069103208871988}
+[seed 0] Epoch 45/60: {'train_loss': 4.569617959093456, 'val_event_loss': 0.5135431645008234, 'val_time_loss': 4.058153372544509}
+[seed 0] Epoch 46/60: {'train_loss': 4.4243688524261975, 'val_event_loss': 0.5001714309820762, 'val_time_loss': 4.0303477965868435}
+[seed 0] Epoch 47/60: {'train_loss': 4.5243918028744785, 'val_event_loss': 0.49547242702772987, 'val_time_loss': 4.032973692967341}
+[seed 0] Epoch 48/60: {'train_loss': 4.529252724214033, 'val_event_loss': 0.5076479599452935, 'val_time_loss': 4.04935255417457}
+[seed 0] Epoch 49/60: {'train_loss': 4.689868349674319, 'val_event_loss': 0.5001792255789042, 'val_time_loss': 4.011111956376296}
+[seed 0] Epoch 50/60: {'train_loss': 4.750892516995265, 'val_event_loss': 0.49591680974341357, 'val_time_loss': 4.069860939796154}
+[seed 0] Epoch 51/60: {'train_loss': 4.640151165733653, 'val_event_loss': 0.5009724615285029, 'val_time_loss': 4.011449318665725}
+[seed 0] Epoch 52/60: {'train_loss': 4.53001755525258, 'val_event_loss': 0.493142336463699, 'val_time_loss': 4.041337114114028}
+[seed 0] Epoch 53/60: {'train_loss': 4.654846490907275, 'val_event_loss': 0.5007638833843745, 'val_time_loss': 4.069942731123704}
+[seed 0] Epoch 54/60: {'train_loss': 4.765701122520384, 'val_event_loss': 0.511708409167253, 'val_time_loss': 4.059877189306112}
+[seed 0] Epoch 55/60: {'train_loss': 4.64933404449589, 'val_event_loss': 0.5152850384609058, 'val_time_loss': 4.056822240352631}
+[seed 0] Epoch 56/60: {'train_loss': 4.514744754665154, 'val_event_loss': 0.4975611666360727, 'val_time_loss': 4.083540567984948}
+[seed 0] Epoch 57/60: {'train_loss': 4.610281640833074, 'val_event_loss': 0.5053624165459321, 'val_time_loss': 4.058302682179671}
+[seed 0] Epoch 58/60: {'train_loss': 4.452147481855282, 'val_event_loss': 0.5157558224522151, 'val_time_loss': 4.047050962081323}
+[seed 0] Epoch 59/60: {'train_loss': 4.586569370317065, 'val_event_loss': 0.5199756262680659, 'val_time_loss': 4.034578864391033}
+^[[seed 0] Epoch 60/60: {'train_loss': 4.453643302286952, 'val_event_loss': 0.50592856725248, 'val_time_loss': 4.056380125192495}
+[seed 0] Best validation loss (event + time NLL): 4.5096 at epoch 10/60. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.6210806710788837, 'test_time_loss': 4.5107235954358025, 'best_epoch': 10}
+[seed 0] Saved checkpoint to checkpoint_len48.pt
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 60 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --seq_len 48 --checkpoint checkpoint_len48.ptython3 diagnose_generation.py --checkpoint checkpoint_len48.pt
+usage: train.py [-h] [--data DATA] [--seq_len SEQ_LEN] [--d_model D_MODEL] [--nhead NHEAD]
+                [--num_layers NUM_LAYERS] [--time_head {mse,lognormal}]
+                [--num_event_types NUM_EVENT_TYPES] [--batch_size BATCH_SIZE] [--epochs EPOCHS]
+                [--lr LR] [--time_loss_weight TIME_LOSS_WEIGHT] [--val_fraction VAL_FRACTION]
+                [--test_fraction TEST_FRACTION] [--num_sim_systems NUM_SIM_SYSTEMS]
+                [--regenerate_each_epoch] [--checkpoint CHECKPOINT] [--run_dir RUN_DIR] [--seed SEED]
+                [--n_seeds N_SEEDS]
+train.py: error: unrecognized arguments: diagnose_generation.py
+harukana_0317@Mac MA02 % python3 train.py --data gg1 --epochs 60 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --seq_len 48 --checkpoint checkpoint_len48.pt
+[seed 0] Generating 20 G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.69, std=1.10
+[seed 0] Epoch 1/60: {'train_loss': 4.896053611739608, 'val_event_loss': 0.6590334197076467, 'val_time_loss': 4.076080909142127}
+[seed 0] Epoch 2/60: {'train_loss': 4.514300202535203, 'val_event_loss': 0.533756997436285, 'val_time_loss': 4.028067795129923}
+[seed 0] Epoch 3/60: {'train_loss': 4.6267326016071415, 'val_event_loss': 0.5105548549730045, 'val_time_loss': 4.03406095963258}
+[seed 0] Epoch 4/60: {'train_loss': 4.7760453243886145, 'val_event_loss': 0.5170127557447324, 'val_time_loss': 4.029807168703813}
+[seed 0] Epoch 5/60: {'train_loss': 4.63673861164692, 'val_event_loss': 0.5146871868234414, 'val_time_loss': 4.057730569289281}
+[seed 0] Epoch 6/60: {'train_loss': 4.67018499847286, 'val_event_loss': 0.5002223857893393, 'val_time_loss': 4.016669575984661}
+[seed 0] Epoch 7/60: {'train_loss': 4.76005586513803, 'val_event_loss': 0.5148000844682639, 'val_time_loss': 4.031466479484852}
+[seed 0] Epoch 8/60: {'train_loss': 4.622608770023692, 'val_event_loss': 0.5222564270863166, 'val_time_loss': 4.027257525003874}
+[seed 0] Epoch 9/60: {'train_loss': 4.553763097967983, 'val_event_loss': 0.5087708918234477, 'val_time_loss': 4.039511313805213}
+[seed 0] Epoch 10/60: {'train_loss': 4.466796599143793, 'val_event_loss': 0.4913394216161508, 'val_time_loss': 4.018232084237612}
+[seed 0] Epoch 11/60: {'train_loss': 4.476189120741915, 'val_event_loss': 0.4933662053484183, 'val_time_loss': 4.022580719911135}
+[seed 0] Epoch 12/60: {'train_loss': 4.625925570480095, 'val_event_loss': 0.49830857291817665, 'val_time_loss': 4.020282053030455}
+[seed 0] Epoch 13/60: {'train_loss': 4.562832006738206, 'val_event_loss': 0.5143478772101494, 'val_time_loss': 4.0350496264604425}
+[seed 0] Epoch 14/60: {'train_loss': 4.6587189938411235, 'val_event_loss': 0.5052067342285926, 'val_time_loss': 4.034995785126319}
+[seed 0] Epoch 15/60: {'train_loss': 4.612944790154449, 'val_event_loss': 0.5196950414146368, 'val_time_loss': 4.028729768899771}
+[seed 0] Epoch 16/60: {'train_loss': 4.525197145367457, 'val_event_loss': 0.5193227751610371, 'val_time_loss': 4.049403704129732}
+[seed 0] Epoch 17/60: {'train_loss': 4.665312987713774, 'val_event_loss': 0.49244291722201383, 'val_time_loss': 4.031213581562042}
+[seed 0] Epoch 18/60: {'train_loss': 4.449780357770683, 'val_event_loss': 0.5098220485334213, 'val_time_loss': 4.0354879544331475}
+[seed 0] Epoch 19/60: {'train_loss': 4.488001350528938, 'val_event_loss': 0.49592737309061563, 'val_time_loss': 4.025805908900041}
+[seed 0] Epoch 20/60: {'train_loss': 4.81173436503765, 'val_event_loss': 0.5021895837898438, 'val_time_loss': 4.041903417844039}
+[seed 0] Epoch 21/60: {'train_loss': 4.7332574749781084, 'val_event_loss': 0.5142123591727935, 'val_time_loss': 4.04678777547983}
+[seed 0] Epoch 22/60: {'train_loss': 4.539913823781919, 'val_event_loss': 0.4950101295342812, 'val_time_loss': 4.024683750592745}
+[seed 0] Epoch 23/60: {'train_loss': 4.719611889074657, 'val_event_loss': 0.4854078867401068, 'val_time_loss': 4.045301143939678}
+[seed 0] Epoch 24/60: {'train_loss': 4.7919268253421, 'val_event_loss': 0.48941815458238125, 'val_time_loss': 4.0285885104766255}
+[seed 0] Epoch 25/60: {'train_loss': 4.8149775099163215, 'val_event_loss': 0.5084851389894118, 'val_time_loss': 4.054284756000225}
+[seed 0] Epoch 26/60: {'train_loss': 4.496226472302902, 'val_event_loss': 0.49983676322377646, 'val_time_loss': 4.0309863319763775}
+[seed 0] Epoch 27/60: {'train_loss': 4.332887627861717, 'val_event_loss': 0.5128454759430426, 'val_time_loss': 4.041647145381341}
+[seed 0] Epoch 28/60: {'train_loss': 4.398857213248891, 'val_event_loss': 0.5211574003960078, 'val_time_loss': 4.038951254807985}
+[seed 0] Epoch 29/60: {'train_loss': 4.370657948423023, 'val_event_loss': 0.5033174435106608, 'val_time_loss': 4.026308027597574}
+[seed 0] Epoch 30/60: {'train_loss': 4.645322919877107, 'val_event_loss': 0.5018907822668552, 'val_time_loss': 4.056596554242647}
+[seed 0] Epoch 31/60: {'train_loss': 4.766114642797422, 'val_event_loss': 0.5017487766364446, 'val_time_loss': 4.054005774167868}
+[seed 0] Epoch 32/60: {'train_loss': 4.707532488610133, 'val_event_loss': 0.5049213987703507, 'val_time_loss': 4.062156580961668}
+[seed 0] Epoch 33/60: {'train_loss': 4.613265683828306, 'val_event_loss': 0.5247271012228268, 'val_time_loss': 4.063619737441723}
+[seed 0] Epoch 34/60: {'train_loss': 4.60619910886465, 'val_event_loss': 0.51361054683534, 'val_time_loss': 4.049185427335592}
+[seed 0] Epoch 35/60: {'train_loss': 4.555169915364793, 'val_event_loss': 0.5000958366749378, 'val_time_loss': 4.020877952759083}
+[seed 0] Epoch 36/60: {'train_loss': 4.469959416665321, 'val_event_loss': 0.5110663742973254, 'val_time_loss': 4.0326785536912775}
+[seed 0] Epoch 37/60: {'train_loss': 4.739293882669497, 'val_event_loss': 0.503167403002198, 'val_time_loss': 4.058266607614664}
+[seed 0] Epoch 38/60: {'train_loss': 4.6298483383557025, 'val_event_loss': 0.5034366795936456, 'val_time_loss': 4.014173672749446}
+[seed 0] Epoch 39/60: {'train_loss': 4.340119379611055, 'val_event_loss': 0.502180409259521, 'val_time_loss': 4.027452711875622}
+[seed 0] Epoch 40/60: {'train_loss': 4.7536696126638365, 'val_event_loss': 0.5066601258630936, 'val_time_loss': 4.069301284276522}
+[seed 0] Epoch 41/60: {'train_loss': 4.550447261037905, 'val_event_loss': 0.5026802804607612, 'val_time_loss': 4.038479318985572}
+[seed 0] Epoch 42/60: {'train_loss': 4.22053838958425, 'val_event_loss': 0.4929374096771845, 'val_time_loss': 4.0285601524206305}
+[seed 0] Epoch 43/60: {'train_loss': 4.73777178890449, 'val_event_loss': 0.5074739208301673, 'val_time_loss': 4.089309376019698}
+[seed 0] Epoch 44/60: {'train_loss': 4.456689046434135, 'val_event_loss': 0.548257832773603, 'val_time_loss': 4.069103208871988}
+[seed 0] Epoch 45/60: {'train_loss': 4.569617959093456, 'val_event_loss': 0.5135431645008234, 'val_time_loss': 4.058153372544509}
+[seed 0] Epoch 46/60: {'train_loss': 4.4243688524261975, 'val_event_loss': 0.5001714309820762, 'val_time_loss': 4.0303477965868435}
+[seed 0] Epoch 47/60: {'train_loss': 4.5243918028744785, 'val_event_loss': 0.49547242702772987, 'val_time_loss': 4.032973692967341}
+[seed 0] Epoch 48/60: {'train_loss': 4.529252724214033, 'val_event_loss': 0.5076479599452935, 'val_time_loss': 4.04935255417457}
+[seed 0] Epoch 49/60: {'train_loss': 4.689868349674319, 'val_event_loss': 0.5001792255789042, 'val_time_loss': 4.011111956376296}
+[seed 0] Epoch 50/60: {'train_loss': 4.750892516995265, 'val_event_loss': 0.49591680974341357, 'val_time_loss': 4.069860939796154}
+[seed 0] Epoch 51/60: {'train_loss': 4.640151165733653, 'val_event_loss': 0.5009724615285029, 'val_time_loss': 4.011449318665725}
+[seed 0] Epoch 52/60: {'train_loss': 4.53001755525258, 'val_event_loss': 0.493142336463699, 'val_time_loss': 4.041337114114028}
+[seed 0] Epoch 53/60: {'train_loss': 4.654846490907275, 'val_event_loss': 0.5007638833843745, 'val_time_loss': 4.069942731123704}
+[seed 0] Epoch 54/60: {'train_loss': 4.765701122520384, 'val_event_loss': 0.511708409167253, 'val_time_loss': 4.059877189306112}
+[seed 0] Epoch 55/60: {'train_loss': 4.64933404449589, 'val_event_loss': 0.5152850384609058, 'val_time_loss': 4.056822240352631}
+[seed 0] Epoch 56/60: {'train_loss': 4.514744754665154, 'val_event_loss': 0.4975611666360727, 'val_time_loss': 4.083540567984948}
+[seed 0] Epoch 57/60: {'train_loss': 4.610281640833074, 'val_event_loss': 0.5053624165459321, 'val_time_loss': 4.058302682179671}
+[seed 0] Epoch 58/60: {'train_loss': 4.452147481855282, 'val_event_loss': 0.5157558224522151, 'val_time_loss': 4.047050962081323}
+[seed 0] Epoch 59/60: {'train_loss': 4.586569370317065, 'val_event_loss': 0.5199756262680659, 'val_time_loss': 4.034578864391033}
+[seed 0] Epoch 60/60: {'train_loss': 4.453643302286952, 'val_event_loss': 0.50592856725248, 'val_time_loss': 4.056380125192495}
+[seed 0] Best validation loss (event + time NLL): 4.5096 at epoch 10/60. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.6210806710788837, 'test_time_loss': 4.5107235954358025, 'best_epoch': 10}
+[seed 0] Saved checkpoint to checkpoint_len48.pt
+harukana_0317@Mac MA02 % python3 diagnose_generation.py --checkpoint checkpoint_len48.pt
+Checkpoint: checkpoint_len48.pt | time head: lognormal | generating 10 runs of 900 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.5      5      0     0 |     0     0     0 |  300 |     84.0    70.6 |    97.8     57.0
+gen 0    11.7  11.3  77.0 | -201.8     28   -619   630 |     3   619     0 |  111 |   1397.3  1391.5 |   385.6   2275.6
+gen 1    35.0  33.3  31.6 |   17.8     33     32     0 |     0     0    32 |  300 |   1743.8  1682.8 |   787.7   1812.7
+gen 2    34.7  33.1  32.2 |   12.0     29     24   100 |     9     5    29 |  300 |   1052.6  1055.5 |   233.0   1835.9
+gen 3    36.3  34.2  29.5 |   27.8     67     64     0 |     0     0    64 |  280 |   1699.0  1392.1 |   733.5   2927.5
+gen 4    19.2  17.0  63.8 |  -82.1     49   -423   427 |     0   423     0 |  182 |   1902.3  1225.2 |   670.8   3638.1
+gen 5    35.3  34.0  30.7 |   26.7     48     44     0 |     0     0    44 |  291 |   2047.4  1807.9 |   403.5   3719.8
+gen 6    35.9  34.2  30.0 |   27.4     56     56     0 |     1     0    56 |  284 |   1934.9  1813.5 |   603.7   3443.4
+gen 7    34.3  33.9  31.9 |   19.7     34     23     0 |     0     0    23 |  302 |   1663.3  1962.9 |   414.3   2393.8
+gen 8    34.5  32.4  33.1 |   28.0     65     13     1 |     1     1    14 |  313 |   2747.8  1505.9 |   330.0   6036.2
+gen 9    34.9  34.1  31.0 |   22.1     42     37     0 |     0     0    37 |  294 |   1531.5  1954.8 |   379.2   2196.8
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       38.1      10.7      24.0
+generated (avg runs)        31.4      21.1      34.6
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 1397, 1744, 1053, 1699, 1902, 2047, 1935, 1663, 2748, 1532
+truth cycle mean: 84.0s | median of run means: 1721.4s | runs with mean > 2x truth: 10 of 10
+runs containing impossible states (N<0 or orphan events): 5 of 10
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.
+harukana_0317@Mac MA02 % python3 diagnose_generation.py --checkpoint checkpoint_nll.pt --constrain strict
+Checkpoint: checkpoint_nll.pt | time head: lognormal | constrained generation: strict | generating 10 runs of 900 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.5      5      0     0 |     0     0     0 |  300 |     84.0    70.6 |    97.8     57.0
+gen 0    34.0  33.3  32.8 |    4.5     14     11     0 |     0     0    11 |  300 |    386.4   318.6 |   431.4    381.2
+gen 1    33.6  33.3  33.1 |    7.0     17      5     0 |     0     0     5 |  303 |    682.4   634.9 |   508.0    677.1
+gen 2    33.7  33.3  33.0 |    4.7     14      7     0 |     0     0     7 |  302 |    395.2   283.5 |   265.6    619.5
+gen 3    33.6  33.2  33.2 |    4.2      9      4     0 |     0     0     4 |  304 |    339.2   301.7 |   355.9    377.9
+gen 4    34.1  33.6  32.3 |    7.5     19     16     0 |     0     0    16 |  296 |    633.5   523.9 |   495.3    884.0
+gen 5    35.0  32.5  32.4 |   12.5     28     24     0 |     0     0    24 |  297 |   1005.1   815.7 |    98.2   1867.5
+gen 6    34.0  33.4  32.6 |    5.5     19     12     0 |     0     0    12 |  299 |    474.1   309.0 |   182.0    912.2
+gen 7    33.5  33.4  33.1 |    4.0     13      4     0 |     0     0     4 |  303 |    349.1   247.8 |   237.4    184.2
+gen 8    33.4  33.3  33.3 |    5.9     15      1     0 |     0     0     1 |  305 |    511.8   383.5 |   422.8    741.6
+gen 9    34.5  33.8  31.7 |   17.3     34     26     0 |     0     0    26 |  290 |   1373.1  1255.9 |   388.9   2327.2
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       38.1      10.7      24.0
+generated (avg runs)        44.9      16.1      29.7
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 386, 682, 395, 339, 633, 1005, 474, 349, 512, 1373
+truth cycle mean: 84.0s | median of run means: 492.9s | runs with mean > 2x truth: 10 of 10
+runs containing impossible states (N<0 or orphan events): 0 of 10
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.
+harukana_0317@Mac MA02 % python3 diagnose_generation.py --checkpoint checkpoint_len48.pt --constrain strict
+Checkpoint: checkpoint_len48.pt | time head: lognormal | constrained generation: strict | generating 10 runs of 900 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.5      5      0     0 |     0     0     0 |  300 |     84.0    70.6 |    97.8     57.0
+gen 0    34.2  33.6  32.2 |    6.9     23     19     0 |     0     0    19 |  305 |    655.0   375.4 |  1177.6    440.5
+gen 1    35.0  33.3  31.6 |   17.8     33     32     0 |     0     0    32 |  300 |   1743.8  1682.8 |   787.7   1812.7
+gen 2    35.2  33.4  31.3 |   21.6     42     37     0 |     0     0    37 |  297 |   1417.8  1661.1 |   294.1   2306.5
+gen 3    36.3  34.2  29.5 |   27.8     67     64     0 |     0     0    64 |  280 |   1699.0  1392.1 |   733.5   2927.5
+gen 4    34.9  32.6  32.5 |   22.6     49     23     0 |     0     0    23 |  308 |   1990.2  1847.8 |   822.0   1850.2
+gen 5    35.3  34.0  30.7 |   26.7     48     44     0 |     0     0    44 |  291 |   2047.4  1807.9 |   403.5   3719.8
+gen 6    36.3  34.4  29.3 |   34.7     66     66     0 |     0     0    66 |  278 |   2446.2  2248.4 |   778.2   4446.6
+gen 7    34.3  33.9  31.9 |   19.7     34     23     0 |     0     0    23 |  302 |   1663.3  1962.9 |   414.3   2393.8
+gen 8    34.6  32.7  32.7 |   25.2     61     18     0 |     0     0    18 |  310 |   2411.7  1038.8 |   278.2   5497.4
+gen 9    34.8  34.0  31.2 |   19.2     39     34     0 |     0     0    34 |  296 |   1228.1  1467.2 |   267.2   1991.3
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       38.1      10.7      24.0
+generated (avg runs)        35.6      18.7      26.8
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 655, 1744, 1418, 1699, 1990, 2047, 2446, 1663, 2412, 1228
+truth cycle mean: 84.0s | median of run means: 1721.4s | runs with mean > 2x truth: 10 of 10
+runs containing impossible states (N<0 or orphan events): 0 of 10
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.
+harukana_0317@Mac MA02 %   

@@ -1,0 +1,323 @@
+Last login: Mon Nov  9 12:39:08 on ttys000
+harukana_0317@Harukana-MacBook-2 ~ % cd /Users/harukana_0317/Desktop/MA02 
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_o2des_stable.pt --constrain derived_ordering --n_repeats 30 --out h16_derived.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+     100      21.8      64.2    200
+     200      18.3      52.8    200
+     300      15.3      44.9    200
+     450      13.2      37.9    200
+     600      12.6      29.2    200
+     900      10.0      24.7    200
+
+Checkpoint checkpoint_o2des_stable.pt (training window 16, time head lognormal), generation rule: derived_ordering; 30 runs of 900 steps
+  generated run 1/30
+  generated run 2/30
+  generated run 3/30
+  generated run 4/30
+  generated run 5/30
+  generated run 6/30
+  generated run 7/30
+  generated run 8/30
+  generated run 9/30
+  generated run 10/30
+  generated run 11/30
+  generated run 12/30
+  generated run 13/30
+  generated run 14/30
+  generated run 15/30
+  generated run 16/30
+  generated run 17/30
+  generated run 18/30
+  generated run 19/30
+  generated run 20/30
+  generated run 21/30
+  generated run 22/30
+  generated run 23/30
+  generated run 24/30
+  generated run 25/30
+  generated run 26/30
+  generated run 27/30
+  generated run 28/30
+  generated run 29/30
+  generated run 30/30
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+     100 |        21.8      64.2 |  30/30    22/30       22/30 |               33.1
+     200 |        18.3      52.8 |  30/30    22/30       22/30 |               28.2
+     300 |        15.3      44.9 |  30/30    23/30       23/30 |               20.8
+     450 |        13.2      37.9 |  30/30    21/30       21/30 |               27.4
+     600 |        12.6      29.2 |  30/30    18/30       18/30 |               23.6
+     900 |        10.0      24.7 |  30/30    11/30       11/30 |               31.5
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: not acceptable even at the shortest tested horizon (100 steps).
+Saved h16_derived.csv
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_o2des_stable.pt --n_seed_events 200 --horizons 50 100 200 300 --n_repeats 30 --out h16_seed200.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+      50      28.0     107.7    200
+     100      20.8      77.5    200
+     200      17.3      65.0    200
+     300      14.0      51.3    200
+
+Checkpoint checkpoint_o2des_stable.pt (training window 16, time head lognormal), generation rule: off; 30 runs of 300 steps
+  generated run 1/30
+  generated run 2/30
+  generated run 3/30
+  generated run 4/30
+  generated run 5/30
+  generated run 6/30
+  generated run 7/30
+  generated run 8/30
+  generated run 9/30
+  generated run 10/30
+  generated run 11/30
+  generated run 12/30
+  generated run 13/30
+  generated run 14/30
+  generated run 15/30
+  generated run 16/30
+  generated run 17/30
+  generated run 18/30
+  generated run 19/30
+  generated run 20/30
+  generated run 21/30
+  generated run 22/30
+  generated run 23/30
+  generated run 24/30
+  generated run 25/30
+  generated run 26/30
+  generated run 27/30
+  generated run 28/30
+  generated run 29/30
+  generated run 30/30
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+      50 |        28.0     107.7 |  23/30    29/30       22/30 |               29.0
+     100 |        20.8      77.5 |  14/30    29/30       13/30 |               26.5
+     200 |        17.3      65.0 |   9/30    25/30        7/30 |               28.0
+     300 |        14.0      51.3 |   5/30    19/30        1/30 |               28.0
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: not acceptable even at the shortest tested horizon (50 steps).
+Saved h16_seed200.csv
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_len400.pt --n_seed_events 200 --horizons 50 100 200 300 --n_repeats 30 --out h400_seed200.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+      50      28.0     107.7    200
+     100      20.8      77.5    200
+     200      17.3      65.0    200
+     300      14.0      51.3    200
+
+Checkpoint checkpoint_len400.pt (training window 400, time head lognormal), generation rule: off; 30 runs of 300 steps
+  generated run 1/30
+  generated run 2/30
+  generated run 3/30
+  generated run 4/30
+  generated run 5/30
+  generated run 6/30
+  generated run 7/30
+  generated run 8/30
+  generated run 9/30
+  generated run 10/30
+  generated run 11/30
+  generated run 12/30
+  generated run 13/30
+  generated run 14/30
+  generated run 15/30
+  generated run 16/30
+  generated run 17/30
+  generated run 18/30
+  generated run 19/30
+  generated run 20/30
+  generated run 21/30
+  generated run 22/30
+  generated run 23/30
+  generated run 24/30
+  generated run 25/30
+  generated run 26/30
+  generated run 27/30
+  generated run 28/30
+  generated run 29/30
+  generated run 30/30
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+      50 |        28.0     107.7 |  27/30    29/30       26/30 |               42.0
+     100 |        20.8      77.5 |  23/30    26/30       19/30 |               41.5
+     200 |        17.3      65.0 |  20/30    19/30       10/30 |               46.4
+     300 |        14.0      51.3 |  17/30    11/30        4/30 |               61.6
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: acceptable up to 50 steps; performance drops by 100 steps.
+Saved h400_seed200.csv
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_len400.pt --n_seed_events 200 --horizons 50 100 200 300 --constrain derived_ordering --n_repeats 30 --out h400_derived.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+      50      28.0     107.7    200
+     100      20.8      77.5    200
+     200      17.3      65.0    200
+     300      14.0      51.3    200
+
+Checkpoint checkpoint_len400.pt (training window 400, time head lognormal), generation rule: derived_ordering; 30 runs of 300 steps
+  generated run 1/30
+  generated run 2/30
+  generated run 3/30
+  generated run 4/30
+  generated run 5/30
+  generated run 6/30
+  generated run 7/30
+  generated run 8/30
+  generated run 9/30
+  generated run 10/30
+  generated run 11/30
+  generated run 12/30
+  generated run 13/30
+  generated run 14/30
+  generated run 15/30
+  generated run 16/30
+  generated run 17/30
+  generated run 18/30
+  generated run 19/30
+  generated run 20/30
+  generated run 21/30
+  generated run 22/30
+  generated run 23/30
+  generated run 24/30
+  generated run 25/30
+  generated run 26/30
+  generated run 27/30
+  generated run 28/30
+  generated run 29/30
+  generated run 30/30
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+      50 |        28.0     107.7 |  30/30    30/30       30/30 |               35.5
+     100 |        20.8      77.5 |  30/30    30/30       30/30 |               37.2
+     200 |        17.3      65.0 |  30/30    30/30       30/30 |               36.0
+     300 |        14.0      51.3 |  30/30    27/30       27/30 |               35.7
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: acceptable at every tested horizon (up to 300 steps).
+Saved h400_derived.csv
+harukana_0317@Harukana-MacBook-2 MA02 % python3 train.py --data gg1_o2des --epochs 100 --num_sim_systems 80 --seed 0 --regenerate_each_epoch --time_head lognormal --rho_range 0.3 0.9 --seq_len 400 --n_customers_per_system 400 --window_stride 20 --lr 0.0003 --grad_clip 1.0 --checkpoint checkpoint_len400_b.pt
+[seed 0] Generating 80 O2DES G/G/1 single-server systems...
+[seed 0] train=56 val=12 test=12 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 80 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.23, std=1.78
+[seed 0] Epoch 1/100: {'train_loss': 3.8104837587901526, 'val_event_loss': 0.76110759973526, 'val_time_loss': 2.797853962580363}
+[seed 0] Epoch 2/100: {'train_loss': 3.5120648929050993, 'val_event_loss': 0.7419489900271098, 'val_time_loss': 2.5995452562967936}
+[seed 0] Epoch 3/100: {'train_loss': 3.3726170301437377, 'val_event_loss': 0.7363278706868489, 'val_time_loss': 2.74467085202535}
+[seed 0] Epoch 4/100: {'train_loss': 3.34097922870091, 'val_event_loss': 0.7294825077056885, 'val_time_loss': 2.387211545308431}
+[seed 0] Epoch 5/100: {'train_loss': 3.236289552279881, 'val_event_loss': 0.7245946685473125, 'val_time_loss': 2.651830037434896}
+[seed 0] Epoch 6/100: {'train_loss': 3.209861520358494, 'val_event_loss': 0.7250139276186626, 'val_time_loss': 2.787903626759847}
+[seed 0] Epoch 7/100: {'train_loss': 3.2562978233609883, 'val_event_loss': 0.7299758553504944, 'val_time_loss': 2.321657959620158}
+[seed 0] Epoch 8/100: {'train_loss': 3.145938335146223, 'val_event_loss': 0.7236042539278666, 'val_time_loss': 2.7585690021514893}
+[seed 0] Epoch 9/100: {'train_loss': 3.1323323556355067, 'val_event_loss': 0.7219207406044006, 'val_time_loss': 2.6013437589009603}
+[seed 0] Epoch 10/100: {'train_loss': 3.1364411660603113, 'val_event_loss': 0.718541685740153, 'val_time_loss': 2.1798070430755616}
+[seed 0] Epoch 11/100: {'train_loss': 3.0961068630218507, 'val_event_loss': 0.7274748762448628, 'val_time_loss': 2.3861657619476317}
+[seed 0] Epoch 12/100: {'train_loss': 3.1404909304210116, 'val_event_loss': 0.7307993412017822, 'val_time_loss': 2.258465528488159}
+[seed 0] Epoch 13/100: {'train_loss': 3.0425413029534476, 'val_event_loss': 0.7109958489735921, 'val_time_loss': 2.4992231845855715}
+[seed 0] Epoch 14/100: {'train_loss': 3.034161104474749, 'val_event_loss': 0.7076475222905477, 'val_time_loss': 2.581354856491089}
+[seed 0] Epoch 15/100: {'train_loss': 3.0592996869768414, 'val_event_loss': 0.714182714621226, 'val_time_loss': 2.0802691618601483}
+[seed 0] Epoch 16/100: {'train_loss': 2.9147105625697542, 'val_event_loss': 0.7018331964810689, 'val_time_loss': 2.2056001583735148}
+[seed 0] Epoch 17/100: {'train_loss': 2.945441334588187, 'val_event_loss': 0.7333445310592651, 'val_time_loss': 2.0501053094863892}
+[seed 0] Epoch 18/100: {'train_loss': 2.877541879245213, 'val_event_loss': 0.7055493275324504, 'val_time_loss': 2.1399040778477985}
+[seed 0] Epoch 19/100: {'train_loss': 2.825140792982919, 'val_event_loss': 0.6983636458714803, 'val_time_loss': 1.9330070734024047}
+[seed 0] Epoch 20/100: {'train_loss': 2.8292364767619542, 'val_event_loss': 0.6958387970924378, 'val_time_loss': 2.139231212933858}
+[seed 0] Epoch 21/100: {'train_loss': 2.9709305831364223, 'val_event_loss': 0.6943881829579671, 'val_time_loss': 2.0568105141321817}
+[seed 0] Epoch 22/100: {'train_loss': 2.9361870799745833, 'val_event_loss': 0.7645310719807943, 'val_time_loss': 1.9970073461532594}
+[seed 0] Epoch 23/100: {'train_loss': 2.8025570937565396, 'val_event_loss': 0.6966050942738851, 'val_time_loss': 1.8930310408274333}
+[seed 0] Epoch 24/100: {'train_loss': 2.743983224460057, 'val_event_loss': 0.6937965830167134, 'val_time_loss': 1.926121441523234}
+[seed 0] Epoch 25/100: {'train_loss': 2.7717161893844606, 'val_event_loss': 0.7111446420351665, 'val_time_loss': 1.9378493229548137}
+[seed 0] Epoch 26/100: {'train_loss': 3.090632881437029, 'val_event_loss': 0.721353554725647, 'val_time_loss': 2.0610564311345416}
+[seed 0] Epoch 27/100: {'train_loss': 2.9547025203704833, 'val_event_loss': 0.6936299284299214, 'val_time_loss': 2.0476321458816527}
+[seed 0] Epoch 28/100: {'train_loss': 2.889906188419887, 'val_event_loss': 0.6897446155548096, 'val_time_loss': 2.3667380809783936}
+[seed 0] Epoch 29/100: {'train_loss': 2.86760504926954, 'val_event_loss': 0.6946859876314799, 'val_time_loss': 1.895408002535502}
+[seed 0] Epoch 30/100: {'train_loss': 2.889942240715027, 'val_event_loss': 0.7068064014116923, 'val_time_loss': 2.089133954048157}
+[seed 0] Epoch 31/100: {'train_loss': 2.8897207055773055, 'val_event_loss': 0.6905359506607056, 'val_time_loss': 1.9984055678049724}
+[seed 0] Epoch 32/100: {'train_loss': 2.835936304501125, 'val_event_loss': 0.6894175251324971, 'val_time_loss': 2.331020482381185}
+[seed 0] Epoch 33/100: {'train_loss': 2.8449751002447945, 'val_event_loss': 0.6863367835680644, 'val_time_loss': 1.9047618865966798}
+[seed 0] Epoch 34/100: {'train_loss': 2.777172408785139, 'val_event_loss': 0.6775203148523966, 'val_time_loss': 2.010398491223653}
+[seed 0] Epoch 35/100: {'train_loss': 2.8417980228151594, 'val_event_loss': 0.6802206556002299, 'val_time_loss': 1.9816905419031778}
+[seed 0] Epoch 36/100: {'train_loss': 2.789193752833775, 'val_event_loss': 0.6793545842170715, 'val_time_loss': 2.2547726154327394}
+[seed 0] Epoch 37/100: {'train_loss': 2.788445932524545, 'val_event_loss': 0.6846179286638896, 'val_time_loss': 1.884831436475118}
+[seed 0] Epoch 38/100: {'train_loss': 2.783844290460859, 'val_event_loss': 0.6765945831934611, 'val_time_loss': 2.0064414342244468}
+[seed 0] Epoch 39/100: {'train_loss': 2.777734375, 'val_event_loss': 0.6768553694089253, 'val_time_loss': 1.9894227981567383}
+[seed 0] Epoch 40/100: {'train_loss': 2.82407055582319, 'val_event_loss': 0.6866870919863383, 'val_time_loss': 2.262512993812561}
+[seed 0] Epoch 41/100: {'train_loss': 2.7533978428159442, 'val_event_loss': 0.6756444493929545, 'val_time_loss': 1.852678378423055}
+[seed 0] Epoch 42/100: {'train_loss': 3.005307330404009, 'val_event_loss': 0.7944233616193136, 'val_time_loss': 2.325050934155782}
+[seed 0] Epoch 43/100: {'train_loss': 2.9398534161703926, 'val_event_loss': 0.7134541471799215, 'val_time_loss': 2.142660689353943}
+[seed 0] Epoch 44/100: {'train_loss': 2.758967287199838, 'val_event_loss': 0.6815007170041402, 'val_time_loss': 1.8566105365753174}
+[seed 0] Epoch 45/100: {'train_loss': 2.780487414768764, 'val_event_loss': 0.6844860037167867, 'val_time_loss': 2.038760288556417}
+[seed 0] Epoch 46/100: {'train_loss': 2.7300998994282315, 'val_event_loss': 0.6763407707214355, 'val_time_loss': 1.9307010809580485}
+[seed 0] Epoch 47/100: {'train_loss': 2.760674684388297, 'val_event_loss': 0.6788746953010559, 'val_time_loss': 2.1680628299713134}
+[seed 0] Epoch 48/100: {'train_loss': 2.709641902787345, 'val_event_loss': 0.6752117911974589, 'val_time_loss': 1.8376210371653239}
+[seed 0] Epoch 49/100: {'train_loss': 3.0835846730640957, 'val_event_loss': 0.7443090875943502, 'val_time_loss': 1.9640268325805663}
+[seed 0] Epoch 50/100: {'train_loss': 2.904716910634722, 'val_event_loss': 0.7340607444445292, 'val_time_loss': 1.9060903151830038}
+[seed 0] Epoch 51/100: {'train_loss': 2.687066899027143, 'val_event_loss': 0.681827986240387, 'val_time_loss': 1.883626143137614}
+[seed 0] Epoch 52/100: {'train_loss': 2.6784295422690256, 'val_event_loss': 0.6761059602101643, 'val_time_loss': 1.880812152226766}
+[seed 0] Epoch 53/100: {'train_loss': 2.6397621086665564, 'val_event_loss': 0.6734328428904216, 'val_time_loss': 1.8674283981323243}
+[seed 0] Epoch 54/100: {'train_loss': 2.604229964528765, 'val_event_loss': 0.6723326365152995, 'val_time_loss': 1.92456161181132}
+[seed 0] Epoch 55/100: {'train_loss': 2.643295267650059, 'val_event_loss': 0.6699556152025858, 'val_time_loss': 1.8818614800771079}
+[seed 0] Epoch 56/100: {'train_loss': 2.6142200572150096, 'val_event_loss': 0.6712503552436828, 'val_time_loss': 1.8541468938191732}
+[seed 0] Epoch 57/100: {'train_loss': 2.563428405353001, 'val_event_loss': 0.6671404520670573, 'val_time_loss': 1.9302685499191283}
+[seed 0] Epoch 58/100: {'train_loss': 2.6052718435015, 'val_event_loss': 0.6666303674379984, 'val_time_loss': 1.8696428537368774}
+[seed 0] Epoch 59/100: {'train_loss': 2.7984879527773177, 'val_event_loss': 0.7888131539026896, 'val_time_loss': 2.0112417380015057}
+[seed 0] Epoch 60/100: {'train_loss': 2.650941474097116, 'val_event_loss': 0.6768563429514567, 'val_time_loss': 1.9210876941680908}
+[seed 0] Epoch 61/100: {'train_loss': 2.6070849078042166, 'val_event_loss': 0.6718269944190979, 'val_time_loss': 1.8343950430552165}
+[seed 0] Epoch 62/100: {'train_loss': 2.6036497899464197, 'val_event_loss': 0.6675353487332661, 'val_time_loss': 1.8563206434249877}
+[seed 0] Epoch 63/100: {'train_loss': 2.540689396858215, 'val_event_loss': 0.6658848802248637, 'val_time_loss': 1.9621448914210002}
+[seed 0] Epoch 64/100: {'train_loss': 2.564546585083008, 'val_event_loss': 0.6605326056480407, 'val_time_loss': 1.8388372262318928}
+[seed 0] Epoch 65/100: {'train_loss': 2.5781216757638115, 'val_event_loss': 0.6634952783584595, 'val_time_loss': 1.839574154218038}
+[seed 0] Epoch 66/100: {'train_loss': 2.5187078544071744, 'val_event_loss': 0.6635663946469624, 'val_time_loss': 1.9295287688573202}
+[seed 0] Epoch 67/100: {'train_loss': 2.572001828466143, 'val_event_loss': 0.6626183390617371, 'val_time_loss': 1.8395954847335816}
+[seed 0] Epoch 68/100: {'train_loss': 2.572277685574123, 'val_event_loss': 0.6621144890785218, 'val_time_loss': 1.8548659642537435}
+[seed 0] Epoch 69/100: {'train_loss': 2.5761076382228305, 'val_event_loss': 0.6596718907356263, 'val_time_loss': 1.9333785931269327}
+[seed 0] Epoch 70/100: {'train_loss': 2.5938913788114277, 'val_event_loss': 0.6578210592269897, 'val_time_loss': 1.8285983641942343}
+[seed 0] Epoch 71/100: {'train_loss': 2.5763148614338465, 'val_event_loss': 0.6580056389172871, 'val_time_loss': 1.8286028544108073}
+[seed 0] Epoch 72/100: {'train_loss': 2.6301799365452356, 'val_event_loss': 0.6542267402013143, 'val_time_loss': 1.9252840360005696}
+[seed 0] Epoch 73/100: {'train_loss': 2.6596799305507113, 'val_event_loss': 0.8204316854476928, 'val_time_loss': 1.8867587486902873}
+[seed 0] Epoch 74/100: {'train_loss': 3.0131357772009713, 'val_event_loss': 0.7063061157862346, 'val_time_loss': 2.3034125328063966}
+[seed 0] Epoch 75/100: {'train_loss': 2.7872550215039933, 'val_event_loss': 0.6765283584594727, 'val_time_loss': 2.0537984291712443}
+[seed 0] Epoch 76/100: {'train_loss': 2.6497565473829, 'val_event_loss': 0.6647607882817587, 'val_time_loss': 1.8886792341868082}
+[seed 0] Epoch 77/100: {'train_loss': 2.6042740855898177, 'val_event_loss': 0.6636918663978577, 'val_time_loss': 1.9642951409022014}
+[seed 0] Epoch 78/100: {'train_loss': 2.574776223727635, 'val_event_loss': 0.6612977067629496, 'val_time_loss': 1.9138464053471884}
+[seed 0] Epoch 79/100: {'train_loss': 2.555147688729422, 'val_event_loss': 0.6573291301727295, 'val_time_loss': 1.8902658621470134}
+[seed 0] Epoch 80/100: {'train_loss': 2.613666261945452, 'val_event_loss': 0.6566364407539368, 'val_time_loss': 1.861768627166748}
+[seed 0] Epoch 81/100: {'train_loss': 2.5634991237095424, 'val_event_loss': 0.6545567115147909, 'val_time_loss': 2.0176942030588787}
+[seed 0] Epoch 82/100: {'train_loss': 2.5969453198569163, 'val_event_loss': 0.6566212614377339, 'val_time_loss': 1.923223654429118}
+[seed 0] Epoch 83/100: {'train_loss': 2.5584027324404035, 'val_event_loss': 0.6520249009132385, 'val_time_loss': 1.8830777327219645}
+[seed 0] Epoch 84/100: {'train_loss': 2.6483398846217563, 'val_event_loss': 0.6567187269528707, 'val_time_loss': 1.8474961519241333}
+[seed 0] Epoch 85/100: {'train_loss': 2.600814632007054, 'val_event_loss': 0.6621536453564961, 'val_time_loss': 2.0169627110163373}
+[seed 0] Epoch 86/100: {'train_loss': 2.556681203842163, 'val_event_loss': 0.6528710285822551, 'val_time_loss': 1.9338945388793944}
+[seed 0] Epoch 87/100: {'train_loss': 2.692331157411848, 'val_event_loss': 0.6904174288113912, 'val_time_loss': 1.9407972017923991}
+[seed 0] Epoch 88/100: {'train_loss': 2.5740320682525635, 'val_event_loss': 0.6638420859972636, 'val_time_loss': 1.855239216486613}
+[seed 0] Epoch 89/100: {'train_loss': 2.5209593875067573, 'val_event_loss': 0.656053614616394, 'val_time_loss': 1.867729870478312}
+[seed 0] Epoch 90/100: {'train_loss': 2.5442773171833584, 'val_event_loss': 0.6574112137158712, 'val_time_loss': 1.8573004007339478}
+[seed 0] Epoch 91/100: {'train_loss': 2.5572155032839095, 'val_event_loss': 0.649212259054184, 'val_time_loss': 1.8542964299519857}
+[seed 0] Epoch 92/100: {'train_loss': 2.515605616569519, 'val_event_loss': 0.6452511827150981, 'val_time_loss': 1.8800251483917236}
+[seed 0] Epoch 93/100: {'train_loss': 2.499611953326634, 'val_event_loss': 0.6428098539511363, 'val_time_loss': 1.844380776087443}
+[seed 0] Epoch 94/100: {'train_loss': 2.5430591378893173, 'val_event_loss': 0.67731640736262, 'val_time_loss': 2.0182514588038125}
+[seed 0] Epoch 95/100: {'train_loss': 2.764300560951233, 'val_event_loss': 0.7378493706385295, 'val_time_loss': 2.1915460507074993}
+[seed 0] Epoch 96/100: {'train_loss': 2.62978321824755, 'val_event_loss': 0.6679159522056579, 'val_time_loss': 1.8934658527374268}
+[seed 0] Epoch 97/100: {'train_loss': 2.5560352836336406, 'val_event_loss': 0.6613357345263163, 'val_time_loss': 1.8286429166793823}
+[seed 0] Epoch 98/100: {'train_loss': 2.556071329116821, 'val_event_loss': 0.6541379809379577, 'val_time_loss': 1.848978861172994}
+[seed 0] Epoch 99/100: {'train_loss': 2.4900252853121074, 'val_event_loss': 0.6462614138921102, 'val_time_loss': 1.865196943283081}
+[seed 0] Epoch 100/100: {'train_loss': 2.5320375783102853, 'val_event_loss': 0.6456377188364665, 'val_time_loss': 1.8465657154719035}
+[seed 0] Best validation loss (event + time NLL): 2.4864 at epoch 70/100. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.7109884063402812, 'test_time_loss': 1.8868576606114706, 'best_epoch': 70}
+[seed 0] Saved checkpoint to checkpoint_len400_b.pt
+harukana_0317@Harukana-MacBook-2 MA02 % 

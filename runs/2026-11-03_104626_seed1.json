@@ -1,0 +1,53 @@
+{
+  "config": {
+    "data": "gg1_o2des",
+    "seq_len": 16,
+    "d_model": 64,
+    "nhead": 4,
+    "num_layers": 2,
+    "time_head": "lognormal",
+    "num_event_types": 3,
+    "batch_size": 32,
+    "epochs": 2,
+    "lr": 0.001,
+    "time_loss_weight": 1.0,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15,
+    "num_sim_systems": 6,
+    "rho_range": null,
+    "regenerate_each_epoch": true,
+    "checkpoint": "replicates_quick/ck_all_s1.pt",
+    "run_dir": "runs",
+    "seed": 1,
+    "n_seeds": 1,
+    "n_train_systems": 4,
+    "n_val_systems": 1,
+    "n_test_systems": 1
+  },
+  "env": {
+    "git_commit": null,
+    "torch_version": "2.12.1",
+    "python_version": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+    "cuda_available": false,
+    "start_time": "2026-11-03_104626"
+  },
+  "epochs": [
+    {
+      "epoch": 0,
+      "train_loss": 4.0070790264704454,
+      "val_event_loss": 1.1185241090623956,
+      "val_time_loss": 2.7853174711528577
+    },
+    {
+      "epoch": 1,
+      "train_loss": 3.5355346039549946,
+      "val_event_loss": 0.6401192734116002,
+      "val_time_loss": 3.185838686792474
+    }
+  ],
+  "final": {
+    "test_event_loss": 0.6590132180013155,
+    "test_time_loss": 3.065533663097181,
+    "best_epoch": 2
+  }
+}

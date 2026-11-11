@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queue Data Logger</title>
+</head>
+<body>
+<style>
+  .qlog-root, .qlog-root * { box-sizing: border-box; }
+  .qlog-root {
+    --paper: #F7F4EC;
+    --card: #FFFFFF;
+    --ink: #2B2A26;
+    --ink-soft: #726F63;
+    --line: #DEDACB;
+    --teal: #0F6E56;
+    --teal-soft: #E1F5EE;
+    --amber: #9A6B0C;
+    --amber-soft: #FBF0DC;
+    --coral: #993C1D;
+    --coral-soft: #FAECE7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 20px 16px 28px;
+    border-radius: 16px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .qlog-root {
+      --paper: #1C1B17;
+      --card: #26241D;
+      --ink: #EDEAE0;
+      --ink-soft: #A8A498;
+      --line: #3A382F;
+      --teal: #5DCAA5;
+      --teal-soft: rgba(15,110,86,0.25);
+      --amber: #E3B24C;
+      --amber-soft: rgba(154,107,12,0.25);
+      --coral: #F0997B;
+      --coral-soft: rgba(153,60,29,0.25);
+    }
+  }
+  .qlog-title { font-size: 19px; font-weight: 600; margin: 0 0 4px; }
+  .qlog-subtitle { font-size: 13px; color: var(--ink-soft); margin: 0 0 18px; line-height: 1.5; }
+
+  .qlog-field { margin-bottom: 14px; }
+  .qlog-label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .qlog-input {
+    width: 100%; padding: 12px 14px; font-size: 15px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--card); color: var(--ink);
+  }
+  .qlog-input:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+
+  .qlog-arrival-btn {
+    width: 100%; padding: 20px 16px; font-size: 18px; font-weight: 600;
+    border: none; border-radius: 14px; cursor: pointer;
+    background: var(--teal); color: #F7F4EC;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.08s ease;
+    margin-bottom: 16px;
+  }
+  .qlog-arrival-btn:active { transform: scale(0.97); }
+
+  .qlog-tally { display: flex; gap: 8px; margin-bottom: 18px; }
+  .qlog-tally-box {
+    flex: 1; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 10px 6px; text-align: center;
+  }
+  .qlog-tally-label { font-size: 10.5px; color: var(--ink-soft); margin-bottom: 4px; }
+  .qlog-tally-num {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 22px; font-weight: 600; letter-spacing: 1px;
+  }
+  .qlog-tally-box.teal .qlog-tally-num { color: var(--teal); }
+  .qlog-tally-box.amber .qlog-tally-num { color: var(--amber); }
+  .qlog-tally-box.coral .qlog-tally-num { color: var(--coral); }
+
+  .qlog-section-label {
+    font-size: 12px; color: var(--ink-soft);
+    margin: 0 0 8px; display: flex; justify-content: space-between; align-items: center;
+  }
+
+  .qlog-active-list {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 4px 12px; margin-bottom: 14px; max-height: 320px; overflow-y: auto;
+  }
+  .qlog-cust-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+  }
+  .qlog-cust-row:last-child { border-bottom: none; }
+  .qlog-cust-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .qlog-cust-id { font-weight: 600; font-size: 14px; }
+  .qlog-cust-time { font-size: 11.5px; color: var(--ink-soft); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .qlog-cust-order-tag { font-size: 11.5px; color: var(--amber); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  .qlog-cust-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .qlog-cust-btn {
+    padding: 9px 13px; font-size: 12.5px; font-weight: 600;
+    border: none; border-radius: 8px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+  }
+  .qlog-cust-btn-order { background: var(--amber-soft); color: var(--amber); }
+  .qlog-cust-btn-leave { background: var(--coral-soft); color: var(--coral); }
+  .qlog-cust-btn:active { transform: scale(0.95); }
+
+  .qlog-empty { padding: 20px 0; text-align: center; color: var(--ink-soft); font-size: 13px; }
+
+  .qlog-undo {
+    width: 100%; padding: 10px; font-size: 13px; color: var(--ink-soft);
+    background: transparent; border: 1px solid var(--line); border-radius: 10px;
+    cursor: pointer; margin-bottom: 22px;
+  }
+  .qlog-undo:disabled { opacity: 0.4; cursor: default; }
+
+  .qlog-export {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+  }
+  .qlog-textarea {
+    width: 100%; min-height: 90px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px; padding: 10px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--paper); color: var(--ink); resize: vertical; margin-bottom: 10px;
+  }
+  .qlog-export-actions { display: flex; gap: 8px; }
+  .qlog-btn-secondary {
+    flex: 1; padding: 11px; font-size: 13px; font-weight: 500;
+    border-radius: 8px; cursor: pointer; border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink);
+  }
+  .qlog-btn-secondary.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .qlog-btn-secondary.danger { color: var(--coral); }
+</style>
+
+<div class="qlog-root">
+  <h2 class="qlog-title">Queue Data Logger</h2>
+  <p class="qlog-subtitle">Tap "New Arrival" every time a customer joins the queue. Each customer then gets their own row below — tap "Order" and "Leave" for that specific person whenever it happens. Multiple customers can be in progress at the same time.</p>
+
+  <div class="qlog-field">
+    <label class="qlog-label" for="system-input">Current session (e.g. Counter 1 - Morning)</label>
+    <input class="qlog-input" id="system-input" type="text" placeholder="Name this observation session" oninput="onSystemChange(this.value)">
+  </div>
+
+  <button class="qlog-arrival-btn" onclick="newArrival()">↑ New Arrival</button>
+
+  <div class="qlog-tally">
+    <div class="qlog-tally-box teal">
+      <div class="qlog-tally-label">Waiting</div>
+      <div class="qlog-tally-num" id="tally-waiting">000</div>
+    </div>
+    <div class="qlog-tally-box amber">
+      <div class="qlog-tally-label">Ordered</div>
+      <div class="qlog-tally-num" id="tally-ordered">000</div>
+    </div>
+    <div class="qlog-tally-box coral">
+      <div class="qlog-tally-label">Completed</div>
+      <div class="qlog-tally-num" id="tally-completed">000</div>
+    </div>
+  </div>
+
+  <div class="qlog-section-label">
+    <span>Active queue (this session)</span>
+  </div>
+  <div class="qlog-active-list" id="active-list"></div>
+
+  <button class="qlog-undo" id="undo-btn" onclick="undoLast()">Undo last action</button>
+
+  <div class="qlog-export">
+    <div class="qlog-section-label"><span>Export data</span></div>
+    <textarea class="qlog-textarea" id="csv-output" readonly></textarea>
+    <div class="qlog-export-actions">
+      <button class="qlog-btn-secondary primary" id="copy-btn" onclick="copyCSV()">Copy to clipboard</button>
+      <button class="qlog-btn-secondary danger" onclick="clearAll()">Clear all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let customers = [];   // { id, system_id, seq, arrival_ts, order_ts, leave_ts }
+let actionHistory = []; // { customerId, field } for undo, in chronological order
+
+function pad3(n) { return String(n).padStart(3, '0'); }
+
+function nowStamp() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+function csvField(v) {
+  if (/[",\n]/.test(v)) return '"' + v.replace(/"/g, '""') + '"';
+  return v;
+}
+
+function escapeHTML(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function currentSystem() {
+  const el = document.getElementById('system-input');
+  return (el.value.trim()) || 'unnamed_session';
+}
+
+async function loadState() {
+  let savedCustomers = [];
+  let savedHistory = [];
+  let savedSystem = '';
+  try {
+    const res = await window.storage.get('queue_customers', false);
+    savedCustomers = res ? JSON.parse(res.value) : [];
+  } catch (e) { savedCustomers = []; }
+  try {
+    const res2 = await window.storage.get('queue_action_history', false);
+    savedHistory = res2 ? JSON.parse(res2.value) : [];
+  } catch (e) { savedHistory = []; }
+  try {
+    const res3 = await window.storage.get('queue_current_system', false);
+    savedSystem = res3 ? res3.value : '';
+  } catch (e) { savedSystem = ''; }
+
+  customers = savedCustomers;
+  actionHistory = savedHistory;
+  document.getElementById('system-input').value = savedSystem;
+  render();
+}
+
+async function saveState() {
+  try { await window.storage.set('queue_customers', JSON.stringify(customers), false); }
+  catch (e) { console.error('save customers failed', e); }
+  try { await window.storage.set('queue_action_history', JSON.stringify(actionHistory), false); }
+  catch (e) { console.error('save history failed', e); }
+}
+
+async function onSystemChange(val) {
+  try { await window.storage.set('queue_current_system', val, false); }
+  catch (e) {}
+  render();
+}
+
+function nextSeqFor(systemId) {
+  const count = customers.filter(c => c.system_id === systemId).length;
+  return count + 1;
+}
+
+function newArrival() {
+  const sys = currentSystem();
+  const seq = nextSeqFor(sys);
+  const id = `${sys}__${seq}_${Date.now()}`;
+  customers.push({ id, system_id: sys, seq, arrival_ts: nowStamp(), order_ts: null, leave_ts: null });
+  actionHistory.push({ customerId: id, field: 'arrival' });
+  saveState();
+  render();
+}
+
+function markOrder(customerId) {
+  const c = customers.find(x => x.id === customerId);
+  if (!c || c.order_ts) return;
+  c.order_ts = nowStamp();
+  actionHistory.push({ customerId, field: 'order' });
+  saveState();
+  render();
+}
+
+function markLeave(customerId) {
+  const c = customers.find(x => x.id === customerId);
+  if (!c || c.leave_ts) return;
+  c.leave_ts = nowStamp();
+  actionHistory.push({ customerId, field: 'leave' });
+  saveState();
+  render();
+}
+
+function undoLast() {
+  const action = actionHistory.pop();
+  if (!action) return;
+  const c = customers.find(x => x.id === action.customerId);
+  if (c) {
+    if (action.field === 'arrival') {
+      customers = customers.filter(x => x.id !== action.customerId);
+    } else if (action.field === 'order') {
+      c.order_ts = null;
+    } else if (action.field === 'leave') {
+      c.leave_ts = null;
+    }
+  }
+  saveState();
+  render();
+}
+
+function clearAll() {
+  if (!confirm('Are you sure you want to clear all customers and history? This cannot be undone — export a copy first if needed.')) return;
+  customers = [];
+  actionHistory = [];
+  saveState();
+  render();
+}
+
+function toCSV() {
+  const rows = [];
+  customers.forEach(c => {
+    rows.push({ system_id: c.system_id, customer_id: c.id, event_type: 'A', timestamp: c.arrival_ts });
+    if (c.order_ts) rows.push({ system_id: c.system_id, customer_id: c.id, event_type: 'O', timestamp: c.order_ts });
+    if (c.leave_ts) rows.push({ system_id: c.system_id, customer_id: c.id, event_type: 'D', timestamp: c.leave_ts });
+  });
+  rows.sort((a, b) => (a.timestamp < b.timestamp ? -1 : a.timestamp > b.timestamp ? 1 : 0));
+  const header = 'system_id,customer_id,event_type,timestamp';
+  const lines = rows.map(r => [r.system_id, r.customer_id, r.event_type, r.timestamp].map(csvField).join(','));
+  return [header, ...lines].join('\n');
+}
+
+function copyCSV() {
+  const text = toCSV();
+  const btn = document.getElementById('copy-btn');
+  const old = btn.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => { btn.textContent = old; }, 1500);
+  }).catch(() => {
+    document.getElementById('csv-output').select();
+    alert('Auto-copy failed — the text box content has been selected, please copy manually (Ctrl/Cmd + C)');
+  });
+}
+
+function render() {
+  const sys = currentSystem();
+  const sysCustomers = customers.filter(c => c.system_id === sys);
+
+  const waiting = sysCustomers.filter(c => !c.order_ts && !c.leave_ts).length;
+  const ordered = sysCustomers.filter(c => c.order_ts && !c.leave_ts).length;
+  const completed = sysCustomers.filter(c => c.leave_ts).length;
+
+  document.getElementById('tally-waiting').textContent = pad3(waiting);
+  document.getElementById('tally-ordered').textContent = pad3(ordered);
+  document.getElementById('tally-completed').textContent = pad3(completed);
+
+  const active = sysCustomers.filter(c => !c.leave_ts).sort((a, b) => a.seq - b.seq);
+  const listEl = document.getElementById('active-list');
+  if (active.length === 0) {
+    listEl.innerHTML = '<div class="qlog-empty">No one in the queue right now — tap "New Arrival" to add a customer</div>';
+  } else {
+    listEl.innerHTML = active.map(c => `
+      <div class="qlog-cust-row">
+        <div class="qlog-cust-info">
+          <span class="qlog-cust-id">#${c.seq}</span>
+          <span class="qlog-cust-time">Arrived ${c.arrival_ts.split(' ')[1] || c.arrival_ts}</span>
+          ${c.order_ts ? `<span class="qlog-cust-order-tag">Ordered ${c.order_ts.split(' ')[1] || c.order_ts}</span>` : ''}
+        </div>
+        <div class="qlog-cust-actions">
+          ${c.order_ts ? '' : `<button class="qlog-cust-btn qlog-cust-btn-order" onclick="markOrder('${c.id}')">Order</button>`}
+          <button class="qlog-cust-btn qlog-cust-btn-leave" onclick="markLeave('${c.id}')">Leave</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('csv-output').value = toCSV();
+  document.getElementById('undo-btn').disabled = actionHistory.length === 0;
+}
+
+loadState();
+</script>
+</body>
+</html>

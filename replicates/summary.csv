@@ -1,0 +1,13 @@
+setting,rule,seed,w1_mean,w1_median,runs_close,runs_far,ks_mean,runs_impossible
+all,off,0,954.1,965.0,0,9,0.738,8
+all,off,1,548.0,443.5,1,7,0.591,6
+all,off,2,398.1,234.5,0,5,0.516,7
+stable,off,0,271.1,102.5,1,4,0.448,9
+stable,off,1,405.1,342.5,0,9,0.722,3
+stable,off,2,283.2,176.5,1,4,0.436,8
+all,strict,0,880.3,904.0,2,8,0.639,0
+all,strict,1,529.1,402.5,1,8,0.572,0
+all,strict,2,414.9,184.5,0,5,0.523,0
+stable,strict,0,298,196.0,2,5,0.466,0
+stable,strict,1,430.4,439.0,0,9,0.746,0
+stable,strict,2,290.5,224.0,2,5,0.466,0

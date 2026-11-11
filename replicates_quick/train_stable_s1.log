@@ -1,0 +1,9 @@
+[seed 1] Generating 6 O2DES G/G/1 single-server systems...
+[seed 1] train=4 val=1 test=1 systems
+[seed 1] --regenerate_each_epoch is ON: a fresh batch of 6 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 1] lognormal time head initialised at mean(log(1+dt))=2.35, std=1.86
+[seed 1] Epoch 1/2: {'train_loss': 4.081447451081995, 'val_event_loss': 0.521544508243862, 'val_time_loss': 3.381722613384849}
+[seed 1] Epoch 2/2: {'train_loss': 3.1727969385173225, 'val_event_loss': 0.32715020328760147, 'val_time_loss': 4.411711090489438}
+[seed 1] Best validation loss (event + time NLL): 3.9033 at epoch 1/2. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 1] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.8281624913215637, 'test_time_loss': 2.7530132092927633, 'best_epoch': 1}
+[seed 1] Saved checkpoint to replicates_quick/ck_stable_s1.pt

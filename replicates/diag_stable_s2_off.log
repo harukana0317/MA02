@@ -1,0 +1,45 @@
+Checkpoint: replicates/ck_stable_s2.pt | time head: lognormal | ground truth: o2des | constrained generation: off | generating 10 runs of 900 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.3      7      0     0 |     0     0     0 |  300 |     76.2    56.0 |    63.6     94.0
+gen 0    33.3  33.3  33.4 |   -2.3      4     -1   779 |     9     7     6 |  299 |    134.5    88.1 |    79.7    204.8
+gen 1    34.0  33.1  33.0 |    1.0      9      9   383 |     3     2    11 |  300 |    252.9   128.2 |    97.2    566.6
+gen 2    32.5  33.7  33.7 |   -5.6      4    -11   770 |    31    11     0 |  298 |    168.6    89.6 |   332.4     85.5
+gen 3    32.6  33.6  33.7 |   -1.1      5    -10   276 |    26    12     2 |  297 |    156.0   100.3 |    63.2    165.1
+gen 4    34.2  33.0  32.9 |    9.4     17     12     0 |     0     0    12 |  301 |    814.8   854.3 |   274.0   1032.0
+gen 5    33.2  33.4  33.4 |    0.3      7     -2   403 |     6     3     1 |  303 |    252.1   193.4 |   229.4    242.7
+gen 6    33.7  33.2  33.1 |    1.0      6      6   213 |    11     3     9 |  300 |    347.4   299.9 |    92.4    622.8
+gen 7    33.0  33.5  33.5 |   -1.9      5     -5   599 |    12     6     1 |  301 |    103.2    67.0 |   179.4     56.3
+gen 8    33.8  33.1  33.1 |    3.7     11      7   279 |     6     3    10 |  300 |    639.9   424.9 |   121.0   1293.4
+gen 9    34.3  32.9  32.9 |    8.4     19     13     0 |     0     0    13 |  301 |    724.2   569.2 |   172.9   1317.0
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       45.9       0.0      31.4
+generated (avg runs)        60.9       0.0      34.7
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 134, 253, 169, 156, 815, 252, 347, 103, 640, 724
+truth cycle mean: 76.2s | median of run means: 252.5s | runs with mean > 2x truth: 8 of 10
+runs containing impossible states (N<0 or orphan events): 8 of 10
+
+=== 4) Distance between generated and ground-truth cycle-time distributions ===
+W1 per run (s):  58, 177, 92, 80, 739, 176, 271, 27, 564, 648
+KS D per run:    0.20, 0.35, 0.23, 0.26, 0.80, 0.45, 0.59, 0.14, 0.60, 0.74
+W1  mean +/- std over 10 runs: 283.2 +/- 265.8 s
+KS D mean +/- std over 10 runs: 0.436 +/- 0.236
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.

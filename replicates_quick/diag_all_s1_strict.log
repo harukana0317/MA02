@@ -1,0 +1,37 @@
+Checkpoint: replicates_quick/ck_all_s1.pt | time head: lognormal | ground truth: o2des | constrained generation: strict | generating 2 runs of 180 steps each...
+
+=== 1) One row per run (truth = the ground-truth stream through the same code) ===
+run        A%    O%    D% | N mean  N max  N end   N<0 | orphO orphD  left | cust | cyc mean  median | 1st 1/3 last 1/3
+----------------------------------------------------------------------------------------------------------------------------
+truth    33.3  33.3  33.3 |    1.1      4      0     0 |     0     0     0 |   60 |     61.4    48.8 |    82.0     44.1
+gen 0    34.2  33.2  32.7 |    1.4      4      3     0 |     0     0     3 |   64 |    220.4   149.7 |   136.2    347.3
+gen 1    33.7  33.2  33.2 |    2.4      7      1     0 |     0     0     1 |   65 |    445.7   362.5 |   583.9    309.2
+
+Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
+  N = customers in the system = (#Arrivals - #Leaves so far): mean / max / value at the end / steps with N<0.
+  orphO, orphD = Ordering / Leave events with nobody to attach to (impossible in a real queue).
+  left = customers still unfinished when the stream ends.
+  cyc mean / median = Arrival->Leave time (s); 1st 1/3 and last 1/3 = mean cycle of the earliest vs latest third of customers.
+
+=== 2) Mean time gap (s) BEFORE each event type ===
+                         Arrival  Ordering     Leave
+truth                       48.7       0.0      29.2
+generated (avg runs)       138.3       0.0      77.1
+
+=== 3) Across the generated runs ===
+cycle mean per run (s): 220, 446
+truth cycle mean: 61.4s | median of run means: 333.0s | runs with mean > 2x truth: 2 of 2
+runs containing impossible states (N<0 or orphan events): 0 of 2
+
+=== 4) Distance between generated and ground-truth cycle-time distributions ===
+W1 per run (s):  159, 384
+KS D per run:    0.53, 0.77
+W1  mean +/- std over 2 runs: 271.7 +/- 159.2 s
+KS D mean +/- std over 2 runs: 0.646 +/- 0.172
+
+HOW TO READ IT (what each pattern would point to):
+  - A%/O%/D% far from 33%, or large 'left'  -> the model's event-type choices drift (it loses track of who is in the system).
+  - N end / N max grow large, or N<0 / orphans > 0 -> the generated queue leaves the set of states seen in training.
+  - last 1/3 much bigger than 1st 1/3        -> error accumulates the longer generation runs (exposure bias).
+  - mean >> median, or only some runs huge   -> a few runs blow up; the average is dominated by them.
+  - gap before each event type far from truth -> the time model (dt given event type) is still off.

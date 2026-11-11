@@ -1,0 +1,39 @@
+SUMMARY: distance between generated and ground-truth cycle-time distributions
+W1 = Wasserstein-1 distance in seconds (0 = identical); each seed = ten free-running generations.
+close = runs with W1 <= 30 s; far = runs with W1 > 200 s; impossible = runs containing impossible events.
+
+=== generation rule: off (no rule) ===
+  training systems: all (about 23% unstable)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    0           954.1      965.0    0/10   9/10      0.738        8/10
+    1           548.0      443.5    1/10   7/10      0.591        6/10
+    2           398.1      234.5    0/10   5/10      0.516        7/10
+    across 3 seeds: mean W1 = 633.4 +/- 287.7   (lowest 398.1, highest 954.1)
+  training systems: stable only (rho 0.3-0.9)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    0           271.1      102.5    1/10   4/10      0.448        9/10
+    1           405.1      342.5    0/10   9/10      0.722        3/10
+    2           283.2      176.5    1/10   4/10      0.436        8/10
+    across 3 seeds: mean W1 = 319.8 +/- 74.1   (lowest 271.1, highest 405.1)
+
+=== generation rule: strict (hard rule: forbid impossible events) ===
+  training systems: all (about 23% unstable)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    0           880.3      904.0    2/10   8/10      0.639        0/10
+    1           529.1      402.5    1/10   8/10      0.572        0/10
+    2           414.9      184.5    0/10   5/10      0.523        0/10
+    across 3 seeds: mean W1 = 608.1 +/- 242.5   (lowest 414.9, highest 880.3)
+  training systems: stable only (rho 0.3-0.9)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    0           298.0      196.0    2/10   5/10      0.466        0/10
+    1           430.4      439.0    0/10   9/10      0.746        0/10
+    2           290.5      224.0    2/10   5/10      0.466        0/10
+    across 3 seeds: mean W1 = 339.6 +/- 78.7   (lowest 290.5, highest 430.4)
+
+=== does training on stable systems only help? (mean W1, stable minus all, per seed) ===
+  rule off   : seed 0: -683 s, seed 1: -143 s, seed 2: -115 s   -> stable-only had the lower W1 in 3 of 3 seeds
+  rule strict: seed 0: -582 s, seed 1: -99 s, seed 2: -124 s   -> stable-only had the lower W1 in 3 of 3 seeds
+
+How to read: with only a few seeds no significance test is meaningful. Compare the size of the
+stable-vs-all difference with the spread BETWEEN seeds (the +/- above). If the lowest W1 of one
+setting is still above the highest W1 of the other, the difference is not just seed luck.

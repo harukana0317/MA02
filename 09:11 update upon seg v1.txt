@@ -1,0 +1,225 @@
+Last login: Mon Nov  9 09:57:54 on ttys000
+harukana_0317@Harukana-MacBook-2 ~ % cd /Users/harukana_0317/Desktop/MA02 
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_o2des_stable.pt --constrain strict --out horizon_Satable.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+     100      21.3      52.6    200
+     200      17.6      49.1    200
+     300      15.3      40.4    200
+     450      13.3      36.5    200
+     600      12.8      28.1    200
+     900      10.2      23.5    200
+
+Checkpoint checkpoint_o2des_stable.pt (training window 16, time head lognormal), generation rule: strict; 10 runs of 900 steps
+  generated run 1/10
+  generated run 2/10
+  generated run 3/10
+  generated run 4/10
+  generated run 5/10
+  generated run 6/10
+  generated run 7/10
+  generated run 8/10
+  generated run 9/10
+  generated run 10/10
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+     100 |        21.3      52.6 |  10/10     7/10        7/10 |               36.2
+     200 |        17.6      49.1 |  10/10     6/10        6/10 |               48.1
+     300 |        15.3      40.4 |  10/10     4/10        4/10 |               47.8
+     450 |        13.3      36.5 |  10/10     4/10        4/10 |               37.4
+     600 |        12.8      28.1 |  10/10     3/10        3/10 |              134.2
+     900 |        10.2      23.5 |  10/10     2/10        2/10 |              185.8
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: not acceptable even at the shortest tested horizon (100 steps).
+Saved horizon_Satable.csv
+harukana_0317@Harukana-MacBook-2 MA02 % python3 horizon_analysis.py --checkpoint checkpoint_o2des_stable.pt --out horizon_stable_norule.csv
+Ground truth: O2DES G/G/1, utilisation 0.625; 200 reference runs per horizon
+Perfect-generator reference: W1 (s) of fresh ground-truth runs scored the same way
+ horizon    median  95th pct   runs
+     100      21.3      52.6    200
+     200      17.6      49.1    200
+     300      15.3      40.4    200
+     450      13.3      36.5    200
+     600      12.8      28.1    200
+     900      10.2      23.5    200
+
+Checkpoint checkpoint_o2des_stable.pt (training window 16, time head lognormal), generation rule: off; 10 runs of 900 steps
+  generated run 1/10
+  generated run 2/10
+  generated run 3/10
+  generated run 4/10
+  generated run 5/10
+  generated run 6/10
+  generated run 7/10
+  generated run 8/10
+  generated run 9/10
+  generated run 10/10
+
+ horizon |  perfect W1 accept if |  valid  in band  acceptable |  model W1 (median)
+ (steps) |      median     W1 <= |                             |                   
+--------------------------------------------------------------------------------------
+     100 |        21.3      52.6 |   4/10     6/10        2/10 |               47.7
+     200 |        17.6      49.1 |   2/10     3/10        0/10 |               59.7
+     300 |        15.3      40.4 |   1/10     4/10        0/10 |               45.9
+     450 |        13.3      36.5 |   1/10     5/10        0/10 |               46.5
+     600 |        12.8      28.1 |   1/10     2/10        0/10 |               87.2
+     900 |        10.2      23.5 |   1/10     1/10        0/10 |               92.5
+
+A horizon counts as acceptable when at least 80% of runs are valid (no impossible events) AND have W1 inside the perfect-generator band.
+Result: not acceptable even at the shortest tested horizon (100 steps).
+Saved horizon_stable_norule.csv
+harukana_0317@Harukana-MacBook-2 MA02 % time python3 train.py --data gg1_o2des --epochs 2 --num_sim_systems 80 --seed 0 --regenerate_each_epoch --time_head lognormal --rho_range 0.3 0.9 --seq_len 400 --n_customers_per_system 400 --window_stride 20 --checkpoint smoke_len400.pt
+[seed 0] Generating 80 O2DES G/G/1 single-server systems...
+[seed 0] train=56 val=12 test=12 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 80 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.23, std=1.78
+python3 train.py --data gg1_o2des --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --rho_range 0.3 0.9 --fixed_service 2 25 --fixed_arrival_shape 2 --checkpoint checkpoint_fixed_service.pt
+[seed 0] Epoch 1/2: {'train_loss': 3.94262489931924, 'val_event_loss': 0.7476180950800578, 'val_time_loss': 2.576960817972819}
+[seed 0] Epoch 2/2: {'train_loss': 3.338590451649257, 'val_event_loss': 0.7158147493998209, 'val_time_loss': 2.8518365383148194}
+[seed 0] Best validation loss (event + time NLL): 3.3246 at epoch 1/2. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.7764735261599223, 'test_time_loss': 2.644846455256144, 'best_epoch': 1}
+[seed 0] Saved checkpoint to smoke_len400.pt
+python3 train.py --data gg1_o2des --epochs 2 --num_sim_systems 80 --seed 0     108.45s user 31.61s system 177% cpu 1:19.12 total
+harukana_0317@Harukana-MacBook-2 MA02 % python3 train.py --data gg1_o2des --epochs 100 --num_sim_systems 20 --seed 0 --regenerate_each_epoch --time_head lognormal --rho_range 0.3 0.9 --fixed_service 2 25 --fixed_arrival_shape 2 --checkpoint checkpoint_fixed_service.pt
+[seed 0] Generating 20 O2DES G/G/1 single-server systems...
+[seed 0] train=14 val=3 test=3 systems
+[seed 0] --regenerate_each_epoch is ON: a fresh batch of 20 training systems will be drawn every epoch. Validation/test sets above stay fixed.
+[seed 0] lognormal time head initialised at mean(log(1+dt))=2.27, std=1.79
+[seed 0] Epoch 1/100: {'train_loss': 3.369160931557417, 'val_event_loss': 0.4651266192848032, 'val_time_loss': 3.970398764176802}
+[seed 0] Epoch 2/100: {'train_loss': 2.7189522329717875, 'val_event_loss': 0.40825756138021296, 'val_time_loss': 2.0737410458651455}
+[seed 0] Epoch 3/100: {'train_loss': 2.6099630193784833, 'val_event_loss': 0.6032337654720653, 'val_time_loss': 3.0348559683019465}
+[seed 0] Epoch 4/100: {'train_loss': 2.528803111985326, 'val_event_loss': 0.3983634027567777, 'val_time_loss': 1.8441679802807895}
+[seed 0] Epoch 5/100: {'train_loss': 2.2493936391547322, 'val_event_loss': 0.40321505015546627, 'val_time_loss': 1.8503607684915715}
+[seed 0] Epoch 6/100: {'train_loss': 2.2275240723975003, 'val_event_loss': 0.3969457106156783, 'val_time_loss': 1.8032071113586425}
+[seed 0] Epoch 7/100: {'train_loss': 2.2071961504407227, 'val_event_loss': 0.3913240484215996, 'val_time_loss': 1.735233508456837}
+[seed 0] Epoch 8/100: {'train_loss': 2.251415031030774, 'val_event_loss': 0.4064648855816234, 'val_time_loss': 1.7529305132952604}
+[seed 0] Epoch 9/100: {'train_loss': 2.2155429823324084, 'val_event_loss': 0.39944864484396847, 'val_time_loss': 1.7456722411242398}
+[seed 0] Epoch 10/100: {'train_loss': 2.1581749483011663, 'val_event_loss': 0.4000010509382595, 'val_time_loss': 1.7364390720020642}
+[seed 0] Epoch 11/100: {'train_loss': 2.1978379525244236, 'val_event_loss': 0.39860662005164404, 'val_time_loss': 1.745250899141485}
+[seed 0] Epoch 12/100: {'train_loss': 2.1615084181539714, 'val_event_loss': 0.39321210330182854, 'val_time_loss': 1.7393720583482222}
+[seed 0] Epoch 13/100: {'train_loss': 2.1368460436351597, 'val_event_loss': 0.39326173690232363, 'val_time_loss': 1.7576918471943248}
+[seed 0] Epoch 14/100: {'train_loss': 2.1830016314052045, 'val_event_loss': 0.39158558655868875, 'val_time_loss': 1.7507518356496639}
+[seed 0] Epoch 15/100: {'train_loss': 2.169931692071259, 'val_event_loss': 0.390110892328349, 'val_time_loss': 1.7606058901006525}
+[seed 0] Epoch 16/100: {'train_loss': 2.2064290903508663, 'val_event_loss': 0.3972561253742738, 'val_time_loss': 1.7427356698296286}
+[seed 0] Epoch 17/100: {'train_loss': 2.1591418785974383, 'val_event_loss': 0.3951076304370707, 'val_time_loss': 1.736900992826982}
+[seed 0] Epoch 18/100: {'train_loss': 2.183622144162655, 'val_event_loss': 0.3881050258874893, 'val_time_loss': 1.7616819446737115}
+[seed 0] Epoch 19/100: {'train_loss': 2.153253747150302, 'val_event_loss': 0.3971267345276746, 'val_time_loss': 1.7467356031591241}
+[seed 0] Epoch 20/100: {'train_loss': 2.161796936765313, 'val_event_loss': 0.3895137220621109, 'val_time_loss': 1.7353217103264549}
+[seed 0] Epoch 21/100: {'train_loss': 2.1303155729547143, 'val_event_loss': 0.3927417741580443, 'val_time_loss': 1.7403813080354171}
+[seed 0] Epoch 22/100: {'train_loss': 2.150708692613989, 'val_event_loss': 0.3891570354049856, 'val_time_loss': 1.7500247131694446}
+[seed 0] Epoch 23/100: {'train_loss': 2.138890864793211, 'val_event_loss': 0.3865468897602775, 'val_time_loss': 1.7491580681367354}
+[seed 0] Epoch 24/100: {'train_loss': 2.1403465340845287, 'val_event_loss': 0.3957546285607598, 'val_time_loss': 1.7441809805956754}
+[seed 0] Epoch 25/100: {'train_loss': 2.1854020664468408, 'val_event_loss': 0.39522900771011005, 'val_time_loss': 1.7327220071445812}
+[seed 0] Epoch 26/100: {'train_loss': 2.1596245970577, 'val_event_loss': 0.38711546009237113, 'val_time_loss': 1.7442167802290482}
+[seed 0] Epoch 27/100: {'train_loss': 2.1140281674452126, 'val_event_loss': 0.39284344776110214, 'val_time_loss': 1.7506944049488415}
+[seed 0] Epoch 28/100: {'train_loss': 2.154109832830727, 'val_event_loss': 0.39295473965731537, 'val_time_loss': 1.7393395532261242}
+[seed 0] Epoch 29/100: {'train_loss': 2.1373977069742978, 'val_event_loss': 0.3879637829282067, 'val_time_loss': 1.7351359757510099}
+[seed 0] Epoch 30/100: {'train_loss': 2.164302387740463, 'val_event_loss': 0.39474515969103036, 'val_time_loss': 1.7566564668308604}
+[seed 0] Epoch 31/100: {'train_loss': 2.1542683937586844, 'val_event_loss': 0.38999518887563184, 'val_time_loss': 1.7404996373436668}
+[seed 0] Epoch 32/100: {'train_loss': 2.107567858416587, 'val_event_loss': 0.386026467518373, 'val_time_loss': 1.75592932917855}
+[seed 0] Epoch 33/100: {'train_loss': 2.12122862925753, 'val_event_loss': 0.3862957537174225, 'val_time_loss': 1.7313569784164429}
+[seed 0] Epoch 34/100: {'train_loss': 2.1834770180284977, 'val_event_loss': 0.3860240028663115, 'val_time_loss': 1.7485086982900446}
+[seed 0] Epoch 35/100: {'train_loss': 2.1669378839433193, 'val_event_loss': 0.39078118286349556, 'val_time_loss': 1.7506384589455344}
+[seed 0] Epoch 36/100: {'train_loss': 2.141081731300801, 'val_event_loss': 0.3847360535101457, 'val_time_loss': 1.733868798342618}
+[seed 0] Epoch 37/100: {'train_loss': 2.1196210854686797, 'val_event_loss': 0.3956875814632936, 'val_time_loss': 1.7352209503000433}
+[seed 0] Epoch 38/100: {'train_loss': 2.0980634442530572, 'val_event_loss': 0.38663774159821596, 'val_time_loss': 1.7457961862737483}
+[seed 0] Epoch 39/100: {'train_loss': 2.1233491809107363, 'val_event_loss': 0.3866753312674436, 'val_time_loss': 1.73392456444827}
+[seed 0] Epoch 40/100: {'train_loss': 2.1710336320102215, 'val_event_loss': 0.39541447162628174, 'val_time_loss': 1.7481832135807385}
+[seed 0] Epoch 41/100: {'train_loss': 2.1590372854843736, 'val_event_loss': 0.38446969064799225, 'val_time_loss': 1.764936299757524}
+[seed 0] Epoch 42/100: {'train_loss': 2.119122917763889, 'val_event_loss': 0.3869764344258742, 'val_time_loss': 1.7638975381851196}
+[seed 0] Epoch 43/100: {'train_loss': 2.1169666801579297, 'val_event_loss': 0.38418403701348736, 'val_time_loss': 1.7373636462471702}
+[seed 0] Epoch 44/100: {'train_loss': 2.1653449134901166, 'val_event_loss': 0.39789010909470646, 'val_time_loss': 1.7408689412203702}
+[seed 0] Epoch 45/100: {'train_loss': 2.18787798890844, 'val_event_loss': 0.39579813832586463, 'val_time_loss': 1.7428690866990524}
+[seed 0] Epoch 46/100: {'train_loss': 2.1617848156020045, 'val_event_loss': 0.39204629740931773, 'val_time_loss': 1.7324279568412086}
+[seed 0] Epoch 47/100: {'train_loss': 2.1810768567956984, 'val_event_loss': 0.3893702466379512, 'val_time_loss': 1.7373845252123745}
+[seed 0] Epoch 48/100: {'train_loss': 2.1543949907645583, 'val_event_loss': 0.38516835055568, 'val_time_loss': 1.7454062830318104}
+[seed 0] Epoch 49/100: {'train_loss': 2.161557662766427, 'val_event_loss': 0.3876352066343481, 'val_time_loss': 1.7353887254541571}
+[seed 0] Epoch 50/100: {'train_loss': 2.126625327859074, 'val_event_loss': 0.38970958427949387, 'val_time_loss': 1.7346149964766069}
+[seed 0] Epoch 51/100: {'train_loss': 2.1645125122740865, 'val_event_loss': 0.3853929655118422, 'val_time_loss': 1.7479864185506648}
+[seed 0] Epoch 52/100: {'train_loss': 2.1195698557421565, 'val_event_loss': 0.3864359958605333, 'val_time_loss': 1.7404789274389094}
+[seed 0] Epoch 53/100: {'train_loss': 2.1713533685542643, 'val_event_loss': 0.38631782369180157, 'val_time_loss': 1.742888855934143}
+[seed 0] Epoch 54/100: {'train_loss': 2.1145770912989974, 'val_event_loss': 0.38694143159822986, 'val_time_loss': 1.7364757234399968}
+[seed 0] Epoch 55/100: {'train_loss': 2.1463479148223996, 'val_event_loss': 0.38806534815918314, 'val_time_loss': 1.7323568344116211}
+[seed 0] Epoch 56/100: {'train_loss': 2.1300186649896204, 'val_event_loss': 0.39236131500114096, 'val_time_loss': 1.7439161148938265}
+[seed 0] Epoch 57/100: {'train_loss': 2.109233621507883, 'val_event_loss': 0.3938521146774292, 'val_time_loss': 1.7366322820836848}
+[seed 0] Epoch 58/100: {'train_loss': 2.1340118115767837, 'val_event_loss': 0.38244298073378474, 'val_time_loss': 1.7374236410314388}
+[seed 0] Epoch 59/100: {'train_loss': 2.1467988369986415, 'val_event_loss': 0.38650679236108604, 'val_time_loss': 1.7380216533487494}
+[seed 0] Epoch 60/100: {'train_loss': 2.1527210460044444, 'val_event_loss': 0.392481451142918, 'val_time_loss': 1.73826134855097}
+[seed 0] Epoch 61/100: {'train_loss': 2.1638643573969603, 'val_event_loss': 0.40795144249092447, 'val_time_loss': 1.7797753464091908}
+[seed 0] Epoch 62/100: {'train_loss': 2.126074562780559, 'val_event_loss': 0.39002924913709813, 'val_time_loss': 1.7370471087369053}
+[seed 0] Epoch 63/100: {'train_loss': 2.1087638870812953, 'val_event_loss': 0.39036051739345895, 'val_time_loss': 1.7475588343360207}
+[seed 0] Epoch 64/100: {'train_loss': 2.1395711195655167, 'val_event_loss': 0.3846736295656724, 'val_time_loss': 1.7502730586312034}
+[seed 0] Epoch 65/100: {'train_loss': 2.166903471108526, 'val_event_loss': 0.39463681172240866, 'val_time_loss': 1.7470391858707774}
+[seed 0] Epoch 66/100: {'train_loss': 2.187070987187326, 'val_event_loss': 0.3953798288648779, 'val_time_loss': 1.7374083995819092}
+[seed 0] Epoch 67/100: {'train_loss': 2.115895738825202, 'val_event_loss': 0.3849023485725576, 'val_time_loss': 1.7726422201503407}
+[seed 0] Epoch 68/100: {'train_loss': 2.1287367711775005, 'val_event_loss': 0.39501204273917456, 'val_time_loss': 1.742037506537004}
+[seed 0] Epoch 69/100: {'train_loss': 2.165079112164676, 'val_event_loss': 0.3908802883191542, 'val_time_loss': 1.7545094576748934}
+[seed 0] Epoch 70/100: {'train_loss': 2.172566699795425, 'val_event_loss': 0.3900079981847243, 'val_time_loss': 1.7409535603089765}
+[seed 0] Epoch 71/100: {'train_loss': 2.163457083515823, 'val_event_loss': 0.39716977964748035, 'val_time_loss': 1.7588525533676147}
+[seed 0] Epoch 72/100: {'train_loss': 2.1183678824454546, 'val_event_loss': 0.3825720648873936, 'val_time_loss': 1.7308751648122613}
+[seed 0] Epoch 73/100: {'train_loss': 2.139246012084186, 'val_event_loss': 0.39014280899004505, 'val_time_loss': 1.7253473802046342}
+[seed 0] Epoch 74/100: {'train_loss': 2.1305914986878633, 'val_event_loss': 0.390318560871211, 'val_time_loss': 1.7948743104934692}
+[seed 0] Epoch 75/100: {'train_loss': 2.143168813548982, 'val_event_loss': 0.3889175528829748, 'val_time_loss': 1.7381460081447255}
+[seed 0] Epoch 76/100: {'train_loss': 2.097356998361647, 'val_event_loss': 0.38752394779161975, 'val_time_loss': 1.7481685638427735}
+[seed 0] Epoch 77/100: {'train_loss': 2.161574851721525, 'val_event_loss': 0.3840085709636862, 'val_time_loss': 1.7416512424295598}
+[seed 0] Epoch 78/100: {'train_loss': 2.1387535566464067, 'val_event_loss': 0.3987215667963028, 'val_time_loss': 1.7397400314157658}
+[seed 0] Epoch 79/100: {'train_loss': 2.1270567453466356, 'val_event_loss': 0.3826467470689253, 'val_time_loss': 1.7528669595718385}
+[seed 0] Epoch 80/100: {'train_loss': 2.1337773366831243, 'val_event_loss': 0.386931988325986, 'val_time_loss': 1.7290538376027889}
+[seed 0] Epoch 81/100: {'train_loss': 2.0950763151049614, 'val_event_loss': 0.3849234735423868, 'val_time_loss': 1.7318036447871814}
+[seed 0] Epoch 82/100: {'train_loss': 2.113255168311298, 'val_event_loss': 0.3861871071837165, 'val_time_loss': 1.7355581478639082}
+[seed 0] Epoch 83/100: {'train_loss': 2.158604028634727, 'val_event_loss': 0.3889237027276646, 'val_time_loss': 1.7467274579134855}
+[seed 0] Epoch 84/100: {'train_loss': 2.121486843097955, 'val_event_loss': 0.3838098003105684, 'val_time_loss': 1.7266421188007701}
+[seed 0] Epoch 85/100: {'train_loss': 2.1116144084371626, 'val_event_loss': 0.38456509194590827, 'val_time_loss': 1.731888036294417}
+[seed 0] Epoch 86/100: {'train_loss': 2.154939887113869, 'val_event_loss': 0.39261250360445543, 'val_time_loss': 1.743589741533453}
+[seed 0] Epoch 87/100: {'train_loss': 2.0984036521986127, 'val_event_loss': 0.38863770148970866, 'val_time_loss': 1.7339081764221191}
+[seed 0] Epoch 88/100: {'train_loss': 2.199801951646805, 'val_event_loss': 0.38612335351380433, 'val_time_loss': 1.7317273421721024}
+[seed 0] Epoch 89/100: {'train_loss': 2.1330864038318396, 'val_event_loss': 0.3848055037585172, 'val_time_loss': 1.732244558767839}
+[seed 0] Epoch 90/100: {'train_loss': 2.1686521470546722, 'val_event_loss': 0.38966705799102785, 'val_time_loss': 1.7362937688827516}
+[seed 0] Epoch 91/100: {'train_loss': 2.1291555571369827, 'val_event_loss': 0.389743588458408, 'val_time_loss': 1.7334439212625676}
+[seed 0] Epoch 92/100: {'train_loss': 2.149767765775323, 'val_event_loss': 0.3839396690780466, 'val_time_loss': 1.7460775938901034}
+[seed 0] Epoch 93/100: {'train_loss': 2.1292648524977267, 'val_event_loss': 0.3853333605961366, 'val_time_loss': 1.7292237715287642}
+[seed 0] Epoch 94/100: {'train_loss': 2.155061594210565, 'val_event_loss': 0.3867217028682882, 'val_time_loss': 1.7383799249475653}
+[seed 0] Epoch 95/100: {'train_loss': 2.096883741207421, 'val_event_loss': 0.38586927462707865, 'val_time_loss': 1.7365484952926635}
+[seed 0] Epoch 96/100: {'train_loss': 2.1509370878338814, 'val_event_loss': 0.383632031083107, 'val_time_loss': 1.7305483146147294}
+[seed 0] Epoch 97/100: {'train_loss': 2.168422888033092, 'val_event_loss': 0.39338832091201437, 'val_time_loss': 1.732693769715049}
+[seed 0] Epoch 98/100: {'train_loss': 2.1444179345853627, 'val_event_loss': 0.39961816397580235, 'val_time_loss': 1.7348804170435126}
+[seed 0] Epoch 99/100: {'train_loss': 2.143724990542978, 'val_event_loss': 0.399186079881408, 'val_time_loss': 1.7360044089230624}
+[seed 0] Epoch 100/100: {'train_loss': 2.104057545773685, 'val_event_loss': 0.3867519847371361, 'val_time_loss': 1.7484324672005394}
+[seed 0] Best validation loss (event + time NLL): 2.1105 at epoch 84/100. Checkpoint saved from that epoch (not necessarily the last one).
+[seed 0] FINAL TEST METRICS (touch once!): {'test_event_loss': 0.36818932619961825, 'test_time_loss': 1.8018717809156939, 'best_epoch': 84}
+[seed 0] Saved checkpoint to checkpoint_fixed_service.pt
+harukana_0317@Harukana-MacBook-2 MA02 % python3 audit_times.py --checkpoint checkpoint_o2des_stable.pt --constrain strict
+Checkpoint checkpoint_o2des_stable.pt (training window 16, time head lognormal), generation rule: strict
+
+run     rho_eff | mean gap  service    wait |  W1 gap  W1 svc  W1 wait W1 cycle | mechanism impossible
+                |      (s)      (s)     (s) |     (s)     (s)      (s)      (s) |  broken %     events
+--------------------------------------------------------------------------------------------------------
+truth     0.628 |     79.9     50.0    36.2 |                                   |       0.0          0
+gen 0     0.539 |    105.2     56.7   229.4 |    25.9     8.2    193.2    199.9 |      38.9          0
+gen 1     0.645 |     90.0     58.1    91.6 |    10.2     9.2     55.4     63.4 |      12.3          0
+gen 2     0.636 |     91.7     58.3    40.4 |    12.6    11.9      8.1     15.0 |       0.0          0
+gen 3     0.536 |    105.3     56.4    23.8 |    25.4     8.1     14.5      9.8 |       3.9          0
+gen 4     0.723 |     89.4     64.6   808.1 |    12.4    14.6    771.8    786.4 |      39.9          0
+gen 5     0.592 |     90.5     53.6   298.8 |    11.1     7.5    262.6    266.1 |      49.7          0
+gen 6     0.622 |     94.0     58.5   895.3 |    15.5    10.5    859.1    867.5 |      45.8          0
+gen 7     0.599 |     93.4     55.9   101.1 |    13.8     8.7     64.9     70.7 |      23.0          0
+gen 8     0.624 |    100.0     62.5   195.5 |    20.3    13.1    159.2    171.6 |      25.6          0
+gen 9     0.653 |     91.7     59.9   468.9 |    14.5    10.6    432.7    442.6 |      36.4          0
+
+Legend: rho_eff = mean service / mean inter-arrival measured from the generated events (truth is the first row).
+        mechanism broken % = customers whose Ordering time differs from max(own arrival, previous Leave) by more than 1 s.
+        W1 columns = Wasserstein-1 distance of each time quantity to the ground-truth distribution.
+
+=== Summary over the generated runs ===
+rho_eff: mean 0.617, range 0.536-0.723 (truth 0.628); runs with rho_eff >= 1: 0 of 10
+mechanism broken: mean 27.6% of customers (truth 0%)
+Average W1 as a share of the truth mean (how far off each quantity is, in relative terms):
+   wait (Arrival -> Ordering)                    779%   (truth mean 36.2 s)
+   cycle time (Arrival -> Leave)                 335%   (truth mean 86.3 s)
+   service (Ordering -> Leave)                    20%   (truth mean 50.0 s)
+   inter-arrival (Arrival -> next Arrival)        20%   (truth mean 79.9 s)
+harukana_0317@Harukana-MacBook-2 MA02 % 

@@ -1,0 +1,31 @@
+SUMMARY: distance between generated and ground-truth cycle-time distributions
+W1 = Wasserstein-1 distance in seconds (0 = identical); each seed = ten free-running generations.
+close = runs with W1 <= 30 s; far = runs with W1 > 200 s; impossible = runs containing impossible events.
+
+=== generation rule: off (no rule) ===
+  training systems: all (about 23% unstable)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    1           139.0      139.0     0/2    1/2      0.445         2/2
+    across 1 seeds: mean W1 = 139.0 +/- 0.0   (lowest 139.0, highest 139.0)
+  training systems: stable only (rho 0.3-0.9)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    1           724.0      724.0     0/2    2/2      0.840         2/2
+    across 1 seeds: mean W1 = 724.0 +/- 0.0   (lowest 724.0, highest 724.0)
+
+=== generation rule: strict (hard rule: forbid impossible events) ===
+  training systems: all (about 23% unstable)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    1           271.5      271.5     0/2    1/2      0.650         0/2
+    across 1 seeds: mean W1 = 271.5 +/- 0.0   (lowest 271.5, highest 271.5)
+  training systems: stable only (rho 0.3-0.9)
+    seed      W1 mean  W1 median   close    far  KS D mean  impossible
+    1           771.0      771.0     0/2    2/2      0.875         0/2
+    across 1 seeds: mean W1 = 771.0 +/- 0.0   (lowest 771.0, highest 771.0)
+
+=== does training on stable systems only help? (mean W1, stable minus all, per seed) ===
+  rule off   : seed 1: +585 s   -> stable-only had the lower W1 in 0 of 1 seeds
+  rule strict: seed 1: +500 s   -> stable-only had the lower W1 in 0 of 1 seeds
+
+How to read: with only a few seeds no significance test is meaningful. Compare the size of the
+stable-vs-all difference with the spread BETWEEN seeds (the +/- above). If the lowest W1 of one
+setting is still above the highest W1 of the other, the difference is not just seed luck.

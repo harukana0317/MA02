@@ -1,0 +1,17 @@
+system_id,event_type,timestamp
+sys_1,A,0.00
+sys_1,O,0.12
+sys_1,A,0.32
+sys_1,D,0.55
+sys_1,O,0.60
+sys_1,A,0.71
+sys_1,D,1.02
+sys_1,D,1.40
+sys_2,A,0.00
+sys_2,O,0.15
+sys_2,D,0.28
+sys_2,A,0.60
+sys_2,A,0.95
+sys_2,O,1.05
+sys_2,D,1.10
+sys_2,D,1.55
