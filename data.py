@@ -171,7 +171,8 @@ def generate_gg1_event_log(arrival_shape, arrival_scale, service_shape, service_
     return events
 
 
-def sample_gg1_params(rho_range=None, max_tries=10000, fixed_service=None, fixed_arrival_shape=None):
+def sample_gg1_params(rho_range=None, max_tries=10000, fixed_service=None, fixed_arrival_shape=None,
+                      fixed_params=None):
     """
     Draw one random set of Gamma parameters for a G/G/1 system:
     (arrival_shape, arrival_scale, service_shape, service_scale).
@@ -189,7 +190,16 @@ def sample_gg1_params(rho_range=None, max_tries=10000, fixed_service=None, fixed
     the arrival rate: utilisation is drawn uniformly from rho_range and the arrival scale is
     set to give exactly that utilisation (so rho_range is required). fixed_arrival_shape
     optionally fixes the arrival shape too (otherwise it is drawn from 1 to 3).
+
+    fixed_params=(arrival_shape, arrival_scale, service_shape, service_scale) uses exactly these Gamma
+    parameters for every system (nothing is drawn); it cannot be combined with the options above.
     """
+    if fixed_params is not None:
+        if rho_range is not None or fixed_service is not None or fixed_arrival_shape is not None:
+            raise ValueError("fixed_params cannot be combined with rho_range / fixed_service / fixed_arrival_shape")
+        if len(fixed_params) != 4 or any(v <= 0 for v in fixed_params):
+            raise ValueError(f"fixed_params needs four positive numbers, got {fixed_params}")
+        return tuple(float(v) for v in fixed_params)
     if fixed_arrival_shape is not None and fixed_service is None:
         raise ValueError("fixed_arrival_shape can only be used together with fixed_service")
     if fixed_service is not None:
@@ -222,7 +232,7 @@ def sample_gg1_params(rho_range=None, max_tries=10000, fixed_service=None, fixed
 
 
 def generate_gg1_systems(num_systems=50, n_customers=200, rho_range=None, fixed_service=None,
-                         fixed_arrival_shape=None):
+                         fixed_arrival_shape=None, fixed_params=None):
     """
     List-of-systems wrapper around generate_gg1_event_log(), matching the
     same shape as the other generate_*_systems() functions — a drop-in
@@ -235,7 +245,8 @@ def generate_gg1_systems(num_systems=50, n_customers=200, rho_range=None, fixed_
     systems = []
     for _ in range(num_systems):
         arrival_shape, arrival_scale, service_shape, service_scale = sample_gg1_params(
-            rho_range, fixed_service=fixed_service, fixed_arrival_shape=fixed_arrival_shape)
+            rho_range, fixed_service=fixed_service, fixed_arrival_shape=fixed_arrival_shape,
+            fixed_params=fixed_params)
 
         log = generate_gg1_event_log(arrival_shape, arrival_scale,
                                       service_shape, service_scale, n_customers)
@@ -273,12 +284,13 @@ def generate_gg1_o2des_event_log(arrival_shape, arrival_scale, service_shape, se
 
 
 def generate_gg1_o2des_systems(num_systems=50, n_customers=200, rho_range=None, fixed_service=None,
-                               fixed_arrival_shape=None):
+                               fixed_arrival_shape=None, fixed_params=None):
     """Same parameter ranges as generate_gg1_systems() (including rho_range), but each system comes from the O2DES model."""
     systems = []
     for _ in range(num_systems):
         arrival_shape, arrival_scale, service_shape, service_scale = sample_gg1_params(
-            rho_range, fixed_service=fixed_service, fixed_arrival_shape=fixed_arrival_shape)
+            rho_range, fixed_service=fixed_service, fixed_arrival_shape=fixed_arrival_shape,
+            fixed_params=fixed_params)
 
         log = generate_gg1_o2des_event_log(arrival_shape, arrival_scale,
                                             service_shape, service_scale, n_customers)

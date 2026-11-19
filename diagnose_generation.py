@@ -2,6 +2,8 @@ from queue_rules import VALID_MODES
 import argparse
 import statistics
 
+from validator import validate_stream, completed_cycles as valid_cycles, time_at
+
 from numerical_studies import (
     simulate_customers_gg1,
     _customers_to_event_dt,
@@ -57,8 +59,13 @@ def match_with_counts(stream):
     return records, orphan_order, orphan_leave, leftover
 
 
-def stream_report(stream):
-    """Summary numbers for ONE event stream (list of [event_id, dt])."""
+def stream_report(stream, n_seed=0):
+    """
+    Summary numbers for ONE event stream (list of [event_id, dt]).
+    n_seed > 0: the first n_seed events are the true conditioning history; only customers who ARRIVE
+    after it are used for the cycle-time numbers, so the history the model was given is never scored.
+    Validity comes from validator.py (the full G/G/1 rule set), not from the orphan counts alone.
+    """
     n = len(stream)
     counts = [0, 0, 0]
     dt_sum = [0.0, 0.0, 0.0]
@@ -73,7 +80,9 @@ def stream_report(stream):
         path.append(in_system)
 
     records, orphan_o, orphan_d, leftover = match_with_counts(stream)
-    cycles = [r["leave"] - r["arrival"] for r in records]
+    t_seed_end = time_at(stream, n_seed) if n_seed else None
+    cycles = [r["leave"] - r["arrival"] for r in records if t_seed_end is None or r["arrival"] > t_seed_end]
+    check = validate_stream(stream)
 
     third = len(cycles) // 3
     first_third = statistics.mean(cycles[:third]) if third >= 1 else None
@@ -90,6 +99,11 @@ def stream_report(stream):
         "orphan_o": orphan_o,
         "orphan_d": orphan_d,
         "leftover": leftover,
+        "valid": check["valid"],
+        "first_failure": check["first_failure"],
+        "n_completed": check["n_completed"],
+        "n_unfinished": check["n_unfinished"],
+        "queue_end": check["queue_end"],
         "n_cust": len(cycles),
         "cycle_mean": statistics.mean(cycles) if cycles else None,
         "cycle_median": statistics.median(cycles) if cycles else None,
@@ -133,9 +147,12 @@ def print_table(rows):
               f"{_f(r['first_third'], 8)}{_f(r['last_third'], 9)}")
 
 
-def run_diagnostics(truth_stream, generated_streams):
-    truth = stream_report(truth_stream)
-    reports = [stream_report(s) for s in generated_streams]
+def run_diagnostics(truth_stream, generated_streams, n_seed=0):
+    truth = stream_report(truth_stream, n_seed)
+    reports = [stream_report(s, n_seed) for s in generated_streams]
+    if not truth["valid"]:
+        print("WARNING: the ground-truth stream itself fails the validator "
+              f"({truth['first_failure']}); the validator or the simulator needs checking.")
 
     print("\n=== 1) One row per run (truth = the ground-truth stream through the same code) ===")
     rows = [("truth", truth)] + [(f"gen {i}", r) for i, r in enumerate(reports)]
@@ -163,8 +180,18 @@ Legend: A%/O%/D% = share of Arrival/Ordering/Leave events (truth ~33.3 each).
         print(f"cycle mean per run (s): " + ", ".join(f"{v:.0f}" for v in cyc))
         print(f"truth cycle mean: {truth['cycle_mean']:.1f}s | median of run means: {statistics.median(cyc):.1f}s | "
               f"runs with mean > 2x truth: {over2} of {len(cyc)}")
-    bad_state = sum(1 for r in reports if r["N_neg_steps"] > 0 or r["orphan_o"] + r["orphan_d"] > 0)
-    print(f"runs containing impossible states (N<0 or orphan events): {bad_state} of {len(reports)}")
+    bad_state = sum(1 for r in reports if not r["valid"])
+    print(f"runs violating the G/G/1 rules (validator.py): {bad_state} of {len(reports)}")
+    print("valid per run (1 = no rule broken): " + ", ".join("1" if r["valid"] else "0" for r in reports))
+    cats = {}
+    for r in reports:
+        if not r["valid"]:
+            c = r["first_failure"]["category"]
+            cats[c] = cats.get(c, 0) + 1
+    if cats:
+        print("first failure of the invalid runs: " + ", ".join(f"{k}: {v}" for k, v in sorted(cats.items())))
+    print("completed / unfinished customers at the end (per run): " +
+          ", ".join(f"{r['n_completed']}/{r['n_unfinished']}" for r in reports))
 
     print("\n=== 4) Distance between generated and ground-truth cycle-time distributions ===")
     if scipy_stats is None:
@@ -202,6 +229,10 @@ def parse_args():
     p.add_argument("--service_shape", type=float, default=2.0)
     p.add_argument("--service_scale", type=float, default=25.0)
     p.add_argument("--n_repeats", type=int, default=10)
+    p.add_argument("--n_seed_events", type=int, default=0,
+                   help="Number of true events the generator is conditioned on (the first events of the chronological "
+                        "ground-truth stream). 0 = as many as the model's training window. Independent of the window: "
+                        "the model only looks at its last seq_len events, but the queue-rule state uses all of them.")
     p.add_argument("--truth", choices=["proxy", "o2des"], default="proxy",
                    help="Ground truth source: 'o2des' for checkpoints trained with --data gg1_o2des, "
                         "'proxy' for the earlier simulator (--data gg1).")
@@ -226,14 +257,19 @@ def main():
     ground_truth = truth_fn(
         args.arrival_shape, args.arrival_scale, args.service_shape, args.service_scale,
         n_customers=args.n_customers, seed=999)
+    # Build the FULL chronological event stream first, then take the requested prefix of it.
     truth_stream = _customers_to_event_dt(ground_truth)
-    seed_events = _customers_to_event_dt(ground_truth[:20])
 
     model, dt_mean, dt_std, seq_len = _load_transformer_model(args.checkpoint)
-    seed = seed_events[:seq_len]
+    n_seed = args.n_seed_events or seq_len
+    if n_seed > len(truth_stream):
+        raise SystemExit(f"Asked for {n_seed} conditioning events but the ground-truth stream has only "
+                         f"{len(truth_stream)}; raise --n_customers.")
+    seed = truth_stream[:n_seed]
     constrain_mode = None if args.constrain == "off" else args.constrain
     print(f"Checkpoint: {args.checkpoint} | time head: {model.time_mode} | "
           f"ground truth: {args.truth} | constrained generation: {args.constrain} | "
+          f"conditioning on {len(seed)} true events (model window {seq_len}); "
           f"generating {args.n_repeats} runs of {args.n_customers * 3} steps each...")
 
     streams = []
@@ -241,7 +277,7 @@ def main():
         streams.append(_transformer_generate(model, seed, dt_mean, dt_std, seq_len,
                                              steps=args.n_customers * 3, rng_seed=r,
                                              constrain=constrain_mode))
-    run_diagnostics(truth_stream, streams)
+    run_diagnostics(truth_stream, streams, n_seed=len(seed))
 
 
 if __name__ == "__main__":

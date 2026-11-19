@@ -51,6 +51,7 @@ def main():
     params = (args.arrival_shape, args.arrival_scale, args.service_shape, args.service_scale)
     model, dt_mean, dt_std, seq_len = load_model(args.checkpoint)
     model.eval()
+    device = next(model.parameters()).device
     torch.manual_seed(args.seed)
 
     systems = [_customers_to_event_dt(simulate_gg1_o2des(*params, n_customers=args.n_customers, seed=100000 + args.seed + k))
@@ -64,6 +65,7 @@ def main():
     nll_event, correct, total = 0.0, 0, 0
     with torch.no_grad():
         for X, Y in loader:
+            X, Y = X.to(device), Y.to(device)
             logits, time_out = model(X)
             probs = torch.softmax(logits[:, -1], dim=-1)                       # predicted next event, full context
             target = Y[:, -1, 0].long()                                         # what really came next

@@ -2,12 +2,15 @@ from queue_rules import VALID_MODES
 import argparse
 import csv
 import math
+import json
 import statistics
+import subprocess
 import sys
 
 from diagnose_generation import match_with_counts, stream_report
 from numerical_studies import _customers_to_event_dt, HAVE_TRANSFORMER
 from o2des_gg1 import simulate_gg1_o2des
+from validator import validate_stream
 
 try:
     from numerical_studies import scipy_stats
@@ -64,36 +67,72 @@ def perfect_band(params, horizons, n_seed, reference, n_runs=200, seed0=20000):
     """
     n_customers = (n_seed + max(horizons)) // 3 + 30
     scores = {h: [] for h in horizons}
+    n_invalid = 0
     for k in range(n_runs):
         stream = _customers_to_event_dt(simulate_gg1_o2des(*params, n_customers=n_customers, seed=seed0 + k))
+        if not validate_stream(stream[:n_seed + max(horizons)])["valid"]:
+            n_invalid += 1
         for h in horizons:
             w = prefix_w1(stream, n_seed + h, reference, n_seed)
             if w is not None:
                 scores[h].append(w)
+    if n_invalid:
+        print(f"WARNING: {n_invalid} of {n_runs} reference simulator runs fail validator.py; "
+              "the validator and the simulator disagree about the queue rules.")
     return {h: {"median": quantile(v, 0.5), "p95": quantile(v, 0.95), "n": len(v)} for h, v in scores.items()}
 
 
-def analyse_runs(streams, n_seed, horizons, band, reference):
-    rows = []
+def analyse_runs(streams, n_seed, horizons, band, reference, labels=None):
+    """
+    streams: generated event streams (each starts with its n_seed conditioning events).
+    labels: optional list (same length) naming the conditioning history of each stream.
+    Returns (rows per horizon, per-trajectory records). Invalid trajectories stay in the table:
+    "valid" is judged by validator.py on the first n_seed+h events, and W1 is reported both for all
+    runs (reconstructed cycle times, NOT trustworthy for invalid runs) and for valid runs only.
+    """
+    rows, per_run = [], []
     for h in horizons:
-        w1s, n_valid, n_in_band, n_ok = [], 0, 0, 0
-        for s in streams:
+        w1_all, w1_valid, completed, unfinished = [], [], [], []
+        n_valid, n_in_band, n_ok = 0, 0, 0
+        fail_cats = {}
+        for k, s in enumerate(streams):
             prefix = s[:n_seed + h]
-            rep = stream_report(prefix)
-            valid = rep["orphan_o"] + rep["orphan_d"] == 0 and rep["N_neg_steps"] == 0
+            check = validate_stream(prefix)
+            valid = check["valid"]
             w = prefix_w1(s, n_seed + h, reference, n_seed)
             in_band = w is not None and w <= band[h]["p95"]
             n_valid += valid
             n_in_band += in_band
             n_ok += (valid and in_band)
             if w is not None:
-                w1s.append(w)
+                w1_all.append(w)
+                if valid:
+                    w1_valid.append(w)
+            t_seed = sum(dt for _, dt in s[:n_seed])
+            n_new = sum(1 for c in check["customers"] if c["arrival"] is not None and c["arrival"] > t_seed)
+            n_done = sum(1 for c in check["customers"]
+                         if c["arrival"] is not None and c["arrival"] > t_seed and c["leave"] is not None)
+            completed.append(n_done)
+            unfinished.append(n_new - n_done)
+            if not valid:
+                c = check["first_failure"]["category"]
+                fail_cats[c] = fail_cats.get(c, 0) + 1
+            per_run.append({"run": k, "history": labels[k] if labels else "", "horizon": h, "valid": int(valid),
+                            "first_failure": "" if valid else check["first_failure"]["category"],
+                            "first_failure_index": "" if valid else check["first_failure"]["index"],
+                            "w1": "" if w is None else round(w, 3), "in_band": int(in_band),
+                            "acceptable": int(valid and in_band), "completed_new": n_done,
+                            "unfinished_new": n_new - n_done, "queue_end": check["queue_end"]})
         rows.append({
             "horizon": h, "band_median": band[h]["median"], "band_p95": band[h]["p95"], "runs": len(streams),
             "valid": n_valid, "in_band": n_in_band, "acceptable": n_ok,
-            "model_w1_median": statistics.median(w1s) if w1s else None,
+            "model_w1_median": statistics.median(w1_all) if w1_all else None,
+            "model_w1_median_valid": statistics.median(w1_valid) if w1_valid else None,
+            "completed_median": statistics.median(completed) if completed else None,
+            "unfinished_median": statistics.median(unfinished) if unfinished else None,
+            "first_failures": "; ".join(f"{k}:{v}" for k, v in sorted(fail_cats.items())),
         })
-    return rows
+    return rows, per_run
 
 
 def boundary(rows, accept_fraction):
@@ -120,17 +159,23 @@ def print_band(band):
 
 
 def print_rows(rows, accept_fraction):
-    print(f"\n{'horizon':>8} | {'perfect W1':>11}{'accept if':>10} | {'valid':>6}{'in band':>9}{'acceptable':>12} | {'model W1 (median)':>18}")
-    print(f"{'(steps)':>8} | {'median':>11}{'W1 <=':>10} | {'':>6}{'':>9}{'':>12} | {'':>18}")
-    print("-" * 86)
+    print(f"\n{'horizon':>8} | {'perfect W1':>11}{'accept if':>10} | {'valid':>6}{'in band':>9}{'acceptable':>12} | "
+          f"{'W1 all':>8}{'W1 valid':>10} | {'done':>6}{'unfin.':>7}")
+    print(f"{'(steps)':>8} | {'median':>11}{'W1 <=':>10} | {'':>6}{'':>9}{'':>12} | {'median':>8}{'median':>10} | {'median':>6}{'median':>7}")
+    print("-" * 110)
     for r in rows:
         n = r["runs"]
         print(f"{r['horizon']:>8} | {fmt(r['band_median'], 11, 1)}{fmt(r['band_p95'], 10, 1)} | "
               f"{str(r['valid']) + '/' + str(n):>6}{str(r['in_band']) + '/' + str(n):>9}{str(r['acceptable']) + '/' + str(n):>12} | "
-              f"{fmt(r['model_w1_median'], 18, 1)}")
+              f"{fmt(r['model_w1_median'], 8, 1)}{fmt(r['model_w1_median_valid'], 10, 1)} | "
+              f"{fmt(r['completed_median'], 6)}{fmt(r['unfinished_median'], 7)}")
+        if r["first_failures"]:
+            print(f"{'':>8}   first failures of invalid runs: {r['first_failures']}")
     last_ok, first_bad = boundary(rows, accept_fraction)
     need = f"at least {accept_fraction:.0%} of runs"
-    print(f"\nA horizon counts as acceptable when {need} are valid (no impossible events) AND have W1 inside the perfect-generator band.")
+    print(f"\nA horizon counts as acceptable when {need} are valid (validator.py: all G/G/1 rules hold) AND have W1 inside the perfect-generator band.")
+    print("W1 'all' uses reconstructed cycle times and is not trustworthy for invalid runs; 'valid' uses valid runs only.")
+    print("done / unfin. = customers (arriving after the conditioning events) who finished / had not finished by the cutoff.")
     if first_bad is None:
         print(f"Result: acceptable at every tested horizon (up to {rows[-1]['horizon']} steps).")
     elif last_ok is None:
@@ -145,8 +190,12 @@ def parse_args():
     p.add_argument("--band_only", action="store_true", help="only print the perfect-generator reference (no checkpoint or PyTorch needed)")
     p.add_argument("--horizons", type=int, nargs="+", default=[100, 200, 300, 450, 600, 900],
                    help="generated steps after the conditioning events")
-    p.add_argument("--n_repeats", type=int, default=10)
-    p.add_argument("--n_seed_events", type=int, default=16, help="ground-truth events the generator is conditioned on")
+    p.add_argument("--n_repeats", type=int, default=10, help="continuations generated per conditioning history")
+    p.add_argument("--n_seed_events", type=int, default=16, help="ground-truth events the generator is conditioned on "
+                   "(independent of the model's own context window)")
+    p.add_argument("--history_seeds", type=int, nargs="+", default=[999],
+                   help="seeds of the ground-truth runs used as conditioning histories; several seeds = several "
+                        "different queue states (each gets --n_repeats continuations)")
     p.add_argument("--constrain", choices=["off"] + list(VALID_MODES), default="off")
     p.add_argument("--accept_fraction", type=float, default=0.8)
     p.add_argument("--band_runs", type=int, default=200)
@@ -154,7 +203,8 @@ def parse_args():
     p.add_argument("--arrival_scale", type=float, default=40.0)
     p.add_argument("--service_shape", type=float, default=2.0)
     p.add_argument("--service_scale", type=float, default=25.0)
-    p.add_argument("--out", default=None, help="write the table to this CSV file")
+    p.add_argument("--out", default=None, help="write the table to this CSV file (a .meta.json and a .runs.csv with "
+                   "one row per trajectory and horizon are written next to it)")
     return p.parse_args()
 
 
@@ -177,26 +227,48 @@ def main():
     if not HAVE_TRANSFORMER:
         sys.exit("PyTorch / generate.py are not available in this environment.")
 
-    ground_truth = simulate_gg1_o2des(*params, n_customers=300, seed=999)
-    seed_events = _customers_to_event_dt(ground_truth)[:args.n_seed_events]
     model, dt_mean, dt_std, seq_len = _load_transformer_model(args.checkpoint)
     constrain = None if args.constrain == "off" else args.constrain
+    n_hist_customers = max(300, args.n_seed_events // 3 + 20)
+    histories = {}
+    for hs in args.history_seeds:
+        truth_stream = _customers_to_event_dt(simulate_gg1_o2des(*params, n_customers=n_hist_customers, seed=hs))
+        if len(truth_stream) < args.n_seed_events:
+            sys.exit(f"History seed {hs} has only {len(truth_stream)} events, fewer than --n_seed_events.")
+        histories[hs] = truth_stream[:args.n_seed_events]
     print(f"\nCheckpoint {args.checkpoint} (training window {seq_len}, time head {model.time_mode}), "
-          f"generation rule: {args.constrain}; {args.n_repeats} runs of {max(horizons)} steps")
-    streams = []
-    for r in range(args.n_repeats):
-        streams.append(_transformer_generate(model, seed_events, dt_mean, dt_std, seq_len,
-                                             steps=max(horizons), rng_seed=r, constrain=constrain))
-        print(f"  generated run {r + 1}/{args.n_repeats}")
+          f"generation rule: {args.constrain}; {len(histories)} histories x {args.n_repeats} runs of {max(horizons)} steps; "
+          f"conditioned on {args.n_seed_events} true events")
+    streams, labels = [], []
+    for hs, seed_events in histories.items():
+        for r in range(args.n_repeats):
+            streams.append(_transformer_generate(model, seed_events, dt_mean, dt_std, seq_len,
+                                                 steps=max(horizons), rng_seed=r, constrain=constrain))
+            labels.append(hs)
+            print(f"  generated run {len(streams)}/{len(histories) * args.n_repeats}")
 
-    rows = analyse_runs(streams, len(seed_events), horizons, band, reference)
+    rows, per_run = analyse_runs(streams, args.n_seed_events, horizons, band, reference, labels)
     print_rows(rows, args.accept_fraction)
+    if len(histories) == 1:
+        print("Note: all runs share ONE conditioning history; the runs measure sampling variability for that history only.")
     if args.out:
         with open(args.out, "w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
             w.writeheader()
             w.writerows(rows)
-        print(f"Saved {args.out}")
+        base = args.out[:-4] if args.out.endswith(".csv") else args.out
+        with open(base + ".runs.csv", "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(per_run[0].keys()))
+            w.writeheader()
+            w.writerows(per_run)
+        try:
+            commit = subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL).decode().strip()
+        except Exception:
+            commit = None
+        with open(base + ".meta.json", "w") as f:
+            json.dump({"args": vars(args), "training_window": seq_len, "time_head": model.time_mode,
+                       "git_commit": commit, "band_runs": args.band_runs, "ground_truth_params": params}, f, indent=2)
+        print(f"Saved {args.out}, {base}.runs.csv and {base}.meta.json")
 
 
 if __name__ == "__main__":

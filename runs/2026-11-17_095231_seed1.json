@@ -1,0 +1,75 @@
+{
+  "config_id": "234612f811",
+  "config": {
+    "data": "gg1_o2des",
+    "seq_len": 16,
+    "d_model": 64,
+    "nhead": 4,
+    "num_layers": 2,
+    "time_head": "lognormal",
+    "num_event_types": 3,
+    "batch_size": 32,
+    "epochs": 2,
+    "lr": 0.001,
+    "grad_clip": 0.0,
+    "time_loss_weight": 1.0,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15,
+    "num_sim_systems": 6,
+    "rho_range": null,
+    "fixed_service": null,
+    "fixed_arrival_shape": null,
+    "fixed_params": [
+      2.0,
+      40.0,
+      2.0,
+      25.0
+    ],
+    "n_customers_per_system": 200,
+    "window_stride": 1,
+    "regenerate_each_epoch": true,
+    "checkpoint": "replicates_quick/ck_fixed_s1.pt",
+    "run_dir": "runs",
+    "seed": 1,
+    "n_seeds": 1,
+    "n_train_systems": 4,
+    "n_val_systems": 1,
+    "n_test_systems": 1,
+    "config_id": "234612f811"
+  },
+  "env": {
+    "git_commit": "7f889d1860b8c6fb673d88484976674dec80d618-dirty",
+    "torch_version": "2.12.1",
+    "python_version": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+    "cuda_available": false,
+    "start_time": "2026-11-17_095231"
+  },
+  "epochs": [
+    {
+      "epoch": 0,
+      "train_loss": 3.9718383762934435,
+      "val_event_loss": 0.44816570657573335,
+      "val_time_loss": 3.076695487923818,
+      "val_event_loss_last": 0.5293342213924617,
+      "val_time_loss_last": 3.0688914011602533
+    },
+    {
+      "epoch": 1,
+      "train_loss": 3.564892298554721,
+      "val_event_loss": 0.37641468929917843,
+      "val_time_loss": 3.0845247000864107,
+      "val_event_loss_last": 0.370196619670685,
+      "val_time_loss_last": 3.07681697035489
+    }
+  ],
+  "final": {
+    "test_event_loss": 0.39571335911750793,
+    "test_time_loss": 3.0749122279964083,
+    "test_event_loss_last": 0.37129064047173277,
+    "test_time_loss_last": 3.0640270448710822,
+    "test_n_targets": 9344,
+    "test_n_windows": 584,
+    "best_epoch": 2,
+    "config_id": "234612f811"
+  }
+}

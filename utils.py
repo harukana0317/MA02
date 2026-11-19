@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import random
@@ -19,6 +20,18 @@ def set_seed(seed: int):
     # Makes cuDNN conv algorithms deterministic (slower, but reproducible).
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
+
+
+# Settings that identify WHICH EXPERIMENT a run belongs to. Everything else in a run's config (seed, output
+# paths, split sizes that follow from the seed) may differ between runs of the same experiment.
+_NOT_PART_OF_CONFIG_ID = {"seed", "n_seeds", "checkpoint", "run_dir", "n_train_systems", "n_val_systems",
+                          "n_test_systems", "config_id"}
+
+
+def config_id(config: dict) -> str:
+    """Short hash of the experiment settings (all of `config` except seed, paths and derived counts)."""
+    items = {k: v for k, v in sorted(config.items()) if k not in _NOT_PART_OF_CONFIG_ID}
+    return hashlib.sha1(json.dumps(items, sort_keys=True, default=str).encode()).hexdigest()[:10]
 
 
 def _get_git_commit():
@@ -51,6 +64,7 @@ class ExperimentLogger:
         self.path = os.path.join(run_dir, f"{ts}{suffix}.json")
 
         self.record = {
+            "config_id": config.get("config_id") or config_id(config),
             "config": config,
             "env": {
                 "git_commit": _get_git_commit(),
@@ -78,24 +92,35 @@ class ExperimentLogger:
             json.dump(self.record, f, indent=2)
 
 
-def summarize_runs(run_dir="runs", metric_key="val_time_loss"):
+def summarize_runs(run_dir="runs", metric_key="val_time_loss", config_id_filter=None):
     """
-    Aggregate multiple run JSONs (e.g. from different seeds) into
-    mean/std of a final metric — for reporting "X ± Y" in a paper.
+    Aggregate the run JSONs of ONE experiment (e.g. different seeds) into mean/std of a final metric.
+
+    Only runs with the same config_id are combined. Give config_id_filter to pick the experiment; without it
+    the folder must contain a single configuration, otherwise a ValueError lists the configurations found,
+    because averaging runs with different settings would not mean anything.
     """
     import glob
     import statistics
 
-    values = []
-    for path in glob.glob(os.path.join(run_dir, "*.json")):
+    by_config = {}
+    for path in sorted(glob.glob(os.path.join(run_dir, "*.json"))):
         with open(path) as f:
             rec = json.load(f)
+        cid = rec.get("config_id") or config_id(rec.get("config", {}))
         if metric_key in rec.get("final", {}):
-            values.append(rec["final"][metric_key])
+            by_config.setdefault(cid, []).append((path, rec["final"][metric_key]))
 
-    if not values:
-        return {"n_runs": 0, "mean": None, "std": None, "values": []}
+    if config_id_filter is not None:
+        by_config = {k: v for k, v in by_config.items() if k == config_id_filter}
+    if len(by_config) > 1:
+        raise ValueError(f"{run_dir} holds runs from {len(by_config)} different configurations "
+                         f"({', '.join(by_config)}); pass config_id_filter to choose one.")
+    if not by_config:
+        return {"n_runs": 0, "mean": None, "std": None, "values": [], "config_id": config_id_filter}
 
-    mean = statistics.mean(values)
-    std = statistics.stdev(values) if len(values) > 1 else 0.0
-    return {"n_runs": len(values), "mean": mean, "std": std, "values": values}
+    cid, runs = next(iter(by_config.items()))
+    values = [v for _, v in runs]
+    return {"n_runs": len(values), "mean": statistics.mean(values),
+            "std": statistics.stdev(values) if len(values) > 1 else 0.0,
+            "values": values, "config_id": cid, "files": [p for p, _ in runs]}

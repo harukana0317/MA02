@@ -1,0 +1,7 @@
+experiment_id,setting,rule,seed,run,valid,w1,ks
+a2a388059e,fixed,derived_ordering,1,0,1,41.0,0.42
+a2a388059e,fixed,derived_ordering,1,1,1,68.0,0.43
+a2a388059e,fixed,off,1,0,0,106.0,0.61
+a2a388059e,fixed,off,1,1,0,84.0,0.43
+a2a388059e,fixed,single_server,1,0,0,96.0,0.52
+a2a388059e,fixed,single_server,1,1,0,45.0,0.29

@@ -1,0 +1,38 @@
+{
+  "config_id": "a2a388059e",
+  "config": {
+    "epochs": 2,
+    "num_sim_systems": 6,
+    "n_repeats": 2,
+    "n_customers": 60,
+    "seq_len": 16,
+    "n_customers_per_system": 200,
+    "window_stride": 1,
+    "n_seed_events": 0,
+    "settings": {
+      "fixed": [
+        "--fixed_params",
+        "2",
+        "40",
+        "2",
+        "25"
+      ]
+    },
+    "rules": {
+      "off": [],
+      "single_server": [
+        "--constrain",
+        "single_server"
+      ],
+      "derived_ordering": [
+        "--constrain",
+        "derived_ordering"
+      ]
+    },
+    "seed": 1,
+    "setting": "fixed",
+    "rule": "derived_ordering",
+    "checkpoint": "replicates_quick/ck_fixed_s1.pt"
+  },
+  "git_commit": "7f889d1860b8c6fb673d88484976674dec80d618"
+}

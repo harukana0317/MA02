@@ -2,6 +2,7 @@ import argparse
 import math
 
 import torch
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from data import (
@@ -14,7 +15,7 @@ from data import (
     split_systems_three_way,
 )
 from model import QueueTransformer
-from utils import set_seed, ExperimentLogger, summarize_runs
+from utils import set_seed, ExperimentLogger, summarize_runs, config_id
 
 
 def parse_args():
@@ -60,6 +61,12 @@ def parse_args():
     p.add_argument("--fixed_arrival_shape", type=float, default=None,
                     help="With --fixed_service: also fix the Gamma shape of the inter-arrival times "
                          "(otherwise it is drawn between 1 and 3 for each system).")
+    p.add_argument("--fixed_params", type=float, nargs=4, metavar=("A_SHAPE", "A_SCALE", "S_SHAPE", "S_SCALE"),
+                   default=None,
+                   help="Only for --data gg1 / gg1_o2des. EVERY training system uses exactly these Gamma parameters "
+                        "(arrival shape/scale, service shape/scale); nothing is drawn. Example for the main test queue "
+                        "(rho = 0.625): --fixed_params 2 40 2 25. Cannot be combined with --rho_range, --fixed_service "
+                        "or --fixed_arrival_shape.")
     p.add_argument("--n_customers_per_system", type=int, default=200,
                     help="Customers per generated system (3 events each). Raise it when --seq_len is large.")
     p.add_argument("--window_stride", type=int, default=1,
@@ -83,27 +90,42 @@ def parse_args():
     return p.parse_args()
 
 
-def evaluate(model, loader, event_loss_fn, time_loss_fn, device, num_event_types,
-             dt_mean=0.0, dt_std=1.0):
+def evaluate(model, loader, device, num_event_types, dt_mean=0.0, dt_std=1.0):
+    """
+    Losses per PREDICTION TARGET: loss summed over every target in every batch, divided by the number of
+    targets, so a small last batch counts in proportion to its size.
+      event / time          : all positions of all windows (what the training loss optimises; positions
+                              early in a window see a shorter context than later ones)
+      event_last / time_last: only the LAST position of each window, i.e. the prediction made with the
+                              full context, which is the operation generation actually uses
+    time = negative log-likelihood (lognormal head, includes the zero-gap mass) or MSE (legacy head).
+    """
     model.eval()
-    total_event, total_time, n = 0.0, 0.0, 0
+    sums = {"event": 0.0, "time": 0.0, "event_last": 0.0, "time_last": 0.0}
+    n_all, n_last = 0, 0
     with torch.no_grad():
         for X, Y in loader:
             X, Y = X.to(device), Y.to(device)
             pred_event, pred_time = model(X)
-
-            le = event_loss_fn(pred_event.reshape(-1, num_event_types), Y[..., 0].long().reshape(-1))
+            target_event = Y[..., 0].long()
+            ev = F.cross_entropy(pred_event.reshape(-1, num_event_types), target_event.reshape(-1),
+                                 reduction="none").reshape(target_event.shape)
             if model.time_mode == "lognormal":
                 raw_dt = (Y[..., 1] * dt_std + dt_mean).clamp(min=0.0)
-                lt = model.time_nll(pred_time, Y[..., 0].long(), raw_dt)
+                tm = model.time_nll(pred_time, target_event, raw_dt, reduction="none")
             else:
-                lt = time_loss_fn(pred_time.squeeze(-1), Y[..., 1])
-
-            total_event += le.item()
-            total_time += lt.item()
-            n += 1
+                tm = (pred_time.squeeze(-1) - Y[..., 1]) ** 2
+            sums["event"] += ev.sum().item()
+            sums["time"] += tm.sum().item()
+            sums["event_last"] += ev[:, -1].sum().item()
+            sums["time_last"] += tm[:, -1].sum().item()
+            n_all += ev.numel()
+            n_last += ev.size(0)
     model.train()
-    return total_event / max(n, 1), total_time / max(n, 1)
+    out = {k: (v / max(n_all if not k.endswith("_last") else n_last, 1)) for k, v in sums.items()}
+    out["n_targets"] = n_all
+    out["n_windows"] = n_last
+    return out
 
 
 def run_single_seed(args, seed):
@@ -118,6 +140,11 @@ def run_single_seed(args, seed):
         raise ValueError("--fixed_service requires --rho_range")
     if args.fixed_arrival_shape is not None and args.fixed_service is None:
         raise ValueError("--fixed_arrival_shape requires --fixed_service")
+    if args.fixed_params is not None:
+        if args.data not in ("gg1", "gg1_o2des"):
+            raise ValueError("--fixed_params only applies to --data gg1 or --data gg1_o2des")
+        if args.rho_range is not None or args.fixed_service is not None or args.fixed_arrival_shape is not None:
+            raise ValueError("--fixed_params cannot be combined with --rho_range / --fixed_service / --fixed_arrival_shape")
     if args.regenerate_each_epoch and not is_generative:
         raise ValueError("--regenerate_each_epoch only makes sense with "
                           "--data random, simulate, gg1 or gg1_o2des "
@@ -129,11 +156,13 @@ def run_single_seed(args, seed):
             return generate_random_systems(n, n_customers=nc)
         elif args.data == "gg1":
             return generate_gg1_systems(n, n_customers=nc, rho_range=args.rho_range,
-                                        fixed_service=args.fixed_service, fixed_arrival_shape=args.fixed_arrival_shape)
+                                        fixed_service=args.fixed_service, fixed_arrival_shape=args.fixed_arrival_shape,
+                                        fixed_params=args.fixed_params)
         elif args.data == "gg1_o2des":
             return generate_gg1_o2des_systems(n, n_customers=nc, rho_range=args.rho_range,
                                               fixed_service=args.fixed_service,
-                                              fixed_arrival_shape=args.fixed_arrival_shape)
+                                              fixed_arrival_shape=args.fixed_arrival_shape,
+                                              fixed_params=args.fixed_params)
         else:  # "simulate"
             return generate_simulated_systems(n, n_customers=nc)
 
@@ -213,6 +242,7 @@ def run_single_seed(args, seed):
     config["n_train_systems"] = len(train_systems)
     config["n_val_systems"] = len(val_systems)
     config["n_test_systems"] = len(test_systems)
+    config["config_id"] = config_id(config)
     logger = ExperimentLogger(config, run_dir=args.run_dir, tag=f"seed{seed}")
 
     ckpt_path = args.checkpoint if args.n_seeds == 1 else \
@@ -280,10 +310,12 @@ def run_single_seed(args, seed):
 
         epoch_metrics = {"train_loss": total_loss / len(train_loader)}
         if val_loader is not None:
-            ve, vt = evaluate(model, val_loader, event_loss_fn, time_loss_fn, device, args.num_event_types,
-                              dt_mean, dt_std)
+            val = evaluate(model, val_loader, device, args.num_event_types, dt_mean, dt_std)
+            ve, vt = val["event"], val["time"]
             epoch_metrics["val_event_loss"] = ve
             epoch_metrics["val_time_loss"] = vt
+            epoch_metrics["val_event_loss_last"] = val["event_last"]
+            epoch_metrics["val_time_loss_last"] = val["time_last"]
 
             # With the lognormal head the time part is a real likelihood, so the
             # best epoch is judged on event loss + time NLL (the full joint
@@ -318,9 +350,11 @@ def run_single_seed(args, seed):
 
     final_metrics = {}
     if test_loader is not None:
-        te, tt = evaluate(model, test_loader, event_loss_fn, time_loss_fn, device, args.num_event_types,
-                          dt_mean, dt_std)
-        final_metrics = {"test_event_loss": te, "test_time_loss": tt, "best_epoch": best_epoch}
+        test = evaluate(model, test_loader, device, args.num_event_types, dt_mean, dt_std)
+        final_metrics = {"test_event_loss": test["event"], "test_time_loss": test["time"],
+                         "test_event_loss_last": test["event_last"], "test_time_loss_last": test["time_last"],
+                         "test_n_targets": test["n_targets"], "test_n_windows": test["n_windows"],
+                         "best_epoch": best_epoch, "config_id": config["config_id"]}
         print(f"[seed {seed}] FINAL TEST METRICS (touch once!): {final_metrics}")
     logger.log_final(final_metrics)
     print(f"[seed {seed}] Saved checkpoint to {ckpt_path}")
@@ -340,7 +374,7 @@ def main():
         run_single_seed(args, seed)
 
     for key in ["test_event_loss", "test_time_loss"]:
-        summary = summarize_runs(run_dir=args.run_dir, metric_key=key)
+        summary = summarize_runs(run_dir=args.run_dir, metric_key=key, config_id_filter=config_id(vars(args)))
         if summary["n_runs"] > 0:
             print(f"\n{key}: {summary['mean']:.4f} \u00b1 {summary['std']:.4f} "
                   f"(n={summary['n_runs']} seeds)")

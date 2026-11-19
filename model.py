@@ -97,22 +97,40 @@ class QueueTransformer(nn.Module):
         log_sigma = sel[..., 1].clamp(-5.0, 3.0)   # keeps training numerically stable
         return mu, log_sigma
 
-    def time_nll(self, time_out, next_event, raw_dt):
+    def time_nll(self, time_out, next_event, raw_dt, zero_tol=1e-3, reduction="mean"):
         """
-        Mean negative log-likelihood (nats) of the observed inter-event times
-        under the model, in the ORIGINAL units of dt (seconds), including the
-        change-of-variables term, so the number is a proper density and can be
-        compared with other density models such as the exponential baseline.
-        raw_dt must be >= 0 (zero gaps are fine: we model log(1 + dt)).
+        Negative log-likelihood (nats) of the observed inter-event times, in the ORIGINAL units of dt
+        (seconds). It scores exactly the distribution that sample_dt() draws from:
+
+            Y = mu + sigma * N(0, 1),   dt = max(expm1(Y), 0)
+
+        so dt has a point mass at 0 and a density for dt > 0:
+            dt == 0 (dt <= zero_tol):  -log P(Y <= 0) = -log Phi(-mu / sigma)
+            dt  > 0:                   Gaussian density of y = log(1 + dt), plus the Jacobian term y
+        Zero gaps are real in this queue (a service start follows the event that frees the server at
+        once), so the point mass must be scored; scoring them with the density alone rewards a tiny sigma.
+        The value is a likelihood with respect to a mixed (mass + density) reference measure, so compare it
+        only with models scored the same way (see baseline.py).
+
+        reduction: "mean" (default), "sum" or "none" (one value per target).
         """
         mu, log_sigma = self._select_params(time_out, next_event)
+        sigma = torch.exp(log_sigma)
         y = torch.log1p(raw_dt)
-        nll = 0.5 * ((y - mu) / torch.exp(log_sigma)) ** 2 + log_sigma \
-              + 0.5 * math.log(2 * math.pi) + y        # "+ y" = log(1+dt), the Jacobian
-        return nll.mean()
+        pos_nll = 0.5 * ((y - mu) / sigma) ** 2 + log_sigma + 0.5 * math.log(2 * math.pi) + y
+        zero_nll = -torch.special.log_ndtr(-mu / sigma)          # numerically stable log-CDF
+        nll = torch.where(raw_dt > zero_tol, pos_nll, zero_nll)
+        if reduction == "mean":
+            return nll.mean()
+        if reduction == "sum":
+            return nll.sum()
+        if reduction == "none":
+            return nll
+        raise ValueError(f"reduction must be 'mean', 'sum' or 'none', got {reduction!r}")
 
     def sample_dt(self, time_out_last, event):
-        """Draw dt (seconds, >= 0) for the given event type(s)."""
+        """Draw dt (seconds, >= 0) for the given event type(s). Negative draws become exactly 0
+        (the point mass that time_nll scores)."""
         mu, log_sigma = self._select_params(time_out_last, event)
         y = mu + torch.exp(log_sigma) * torch.randn_like(mu)
         return torch.expm1(y).clamp(min=0.0)

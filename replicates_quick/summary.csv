@@ -1,5 +1,4 @@
-setting,rule,seed,w1_mean,w1_median,runs_close,runs_far,ks_mean,runs_impossible
-all,off,1,139.0,139.0,0,1,0.445,2
-stable,off,1,724.0,724.0,0,2,0.84,2
-all,strict,1,271.5,271.5,0,1,0.65,0
-stable,strict,1,771.0,771.0,0,2,0.875,0
+experiment_id,setting,rule,seed,w1_mean,w1_median,runs_close,runs_far,ks_mean,runs_invalid
+a2a388059e,fixed,off,1,95.0,95.0,0,0,0.52,2
+a2a388059e,fixed,single_server,1,70.5,70.5,0,0,0.405,2
+a2a388059e,fixed,derived_ordering,1,54.5,54.5,0,0,0.425,0

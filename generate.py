@@ -13,11 +13,21 @@ def parse_args():
                     help="Constrained generation: forbid events that are impossible "
                          "in the current state (e.g. a Leave when nobody is in the "
                          "shop). A hard rule applied at generation time only.")
+    p.add_argument("--device", type=str, default=None,
+                    help="'cpu', 'cuda' or e.g. 'cuda:1'. Default: cuda if available, else cpu.")
     return p.parse_args()
 
 
-def load_model(checkpoint_path):
-    ckpt = torch.load(checkpoint_path, map_location="cpu")
+def pick_device(device=None):
+    if device is None:
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    return torch.device(device)
+
+
+def load_model(checkpoint_path, device=None):
+    """Loads the checkpoint onto `device` (default: cuda if available). generate() runs wherever the model is."""
+    device = pick_device(device)
+    ckpt = torch.load(checkpoint_path, map_location=device)
     cfg = ckpt["config"]
 
     model = QueueTransformer(
@@ -27,6 +37,7 @@ def load_model(checkpoint_path):
         time_mode=cfg.get("time_mode", "mse"),   # old checkpoints have no such key -> legacy head
     )
     model.load_state_dict(ckpt["model_state_dict"])
+    model.to(device)
     model.eval()
 
     return model, ckpt["dt_mean"], ckpt["dt_std"], cfg["seq_len"]
@@ -51,8 +62,9 @@ def generate(model, seed, dt_mean, dt_std, seq_len, steps=20, rng_seed=None, con
     Returns: list of [event_id, raw_dt] in REAL units.
     """
     model.eval()
+    device = next(model.parameters()).device
     if rng_seed is not None:
-        torch.manual_seed(rng_seed)
+        torch.manual_seed(rng_seed)   # seeds the CPU and every CUDA generator
 
     state = [0, 0]  # [waiting_to_order, waiting_to_leave], only used when constrain is set
     if constrain:
@@ -73,20 +85,20 @@ def generate(model, seed, dt_mean, dt_std, seq_len, steps=20, rng_seed=None, con
             continue
 
         window = norm_seq[-seq_len:]
-        x = torch.tensor([window], dtype=torch.float32)
+        x = torch.tensor([window], dtype=torch.float32, device=device)
 
         with torch.no_grad():
             event_logits, time_pred = model(x)
 
-            probs = torch.softmax(event_logits[:, -1], dim=-1)
+            logits = event_logits[:, -1]
             if constrain:
+                # Forbidden events get logit -inf BEFORE the softmax, so the result is exactly the model's
+                # conditional distribution over the allowed events (no underflow, no substitute distribution).
+                # Arrival is always allowed, so at least one logit stays finite.
                 allowed = allowed_events(state, constrain)
-                mask = torch.tensor([[1.0 if ok else 0.0 for ok in allowed]], dtype=probs.dtype)
-                masked = probs * mask
-                total = masked.sum()
-                # If the model put (numerically) all its mass on forbidden events,
-                # fall back to a uniform choice among the allowed ones.
-                probs = masked / total if total.item() > 0 else mask / mask.sum()
+                forbidden = torch.tensor([[not ok for ok in allowed]], dtype=torch.bool, device=device)
+                logits = logits.masked_fill(forbidden, float("-inf"))
+            probs = torch.softmax(logits, dim=-1)
             event = torch.multinomial(probs, 1).item()
             if constrain:
                 state = advance_state(state, event)
@@ -95,7 +107,7 @@ def generate(model, seed, dt_mean, dt_std, seq_len, steps=20, rng_seed=None, con
                 # dt is SAMPLED from the distribution belonging to the event
                 # type we just drew, then z-scored so it can be fed back in.
                 dt_sample = model.sample_dt(time_pred[:, -1],
-                                            torch.tensor([event])).item()
+                                            torch.tensor([event], device=device)).item()
                 norm_dt = (dt_sample - dt_mean) / dt_std
             else:
                 norm_dt = time_pred[:, -1].item()
@@ -117,7 +129,7 @@ EVENT_LABELS = {0: "A (Arrival)", 1: "O (Ordering)", 2: "D (Leave)"}
 
 if __name__ == "__main__":
     args = parse_args()
-    model, dt_mean, dt_std, seq_len = load_model(args.checkpoint)
+    model, dt_mean, dt_std, seq_len = load_model(args.checkpoint, args.device)
 
     # Example seed in REAL units (seconds). Replace with a real snippet
     # from collected data to condition generation on it.
